@@ -7,9 +7,6 @@ body {
 body {
   background-image: url("../media/background.jpg");
   background-position: center;
-  color: #fff;
-  text-align: center;
-  text-shadow: 0 1px 3px rgba(0,0,0,.5);
 }
 
 .site-wrapper {
@@ -37,6 +34,9 @@ body {
 
 .cover {
   padding: 0 20px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
 }
 
 .cover .cover-heading {
@@ -49,10 +49,10 @@ body {
 
 .cover .lead {
   font-weight: bold;
-  text-shadow:  -1px -1px 0 #000,  
-                1px -1px 0 #000,
-                -1px 1px 0 #000,
-                1px 1px 0 #000;
+  text-shadow:  -2px -2px 0 #000,  
+                2px -2px 0 #000,
+                -2px 2px 0 #000,
+                2px 2px 0 #000;
 }
 
 .cover .btn-lg {
@@ -81,44 +81,31 @@ body {
   border: 2px solid #000;
 }
 
-#search_window {
-  position: absolute;
-  left: 7%;
-  top: 7%;
-  height: 85%;
-  width: 85%;
-  background-color: white;
-  visibility: hidden;
+.btn:focus {
+  outline: none;
 }
 
-.search_form_heading {
-  color: black;
+#btn-submit-start-trip-modal {
+  margin-left: 15px;
+  font-weight: bold;
+}
+
+.form-inline .form-group {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.form-inline .form-control {
+  width: 100%;
+}
+
+.companions .control-label {
+  padding-left: 30px;
+  margin-right: -70px;
   text-align: left;
-  padding-left: 2%;
 }
 
-.search_form_instructions {
-  color: black;
-  text-align: left;
-  padding-left: 2%;
-  text-shadow: none;
-}
-
-#textfield_start,
-#textfield_end {
-  margin-left: 4%;
-  width: 50%;
-}
-
-.search_label {
-  position: relative;
-  left: -43%;
-  color: black;
-  text-shadow: none;
-}
-
-#datetimepicker_start {
-  position: relative;
-  margin-left: 4%;
-  width: 25%;
+.notes .form-control {
+  margin-left: 15px;
+  width: 95%;
 }

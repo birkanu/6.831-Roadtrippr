@@ -21,37 +21,84 @@
 
     <div class="site-wrapper">
       <div class="site-wrapper-inner">
-        <div class="cover-container">
 
+        <div class="cover-container">
           <div class="inner cover">
             <h1 class="cover-heading">Roadtrippr</h1>
             <p class="lead">SHARE A NEW ADVENTURE</p>
             <p class="lead">
-              <a href="#" id="btn-start-trip" class="btn btn-lg btn-default">Start a Trip</a>
+              <a href="#" id="btn-start-trip" class="btn btn-lg btn-default" data-toggle="modal" data-target="#start-trip-modal">Start a Trip</a>
               <a href="#" id="btn-find-trip" class="btn btn-lg btn-default">Find a Trip</a>
             </p>
           </div>
- 
-<!--           <div id="search_window">
-            <h2 class="search_form_heading">Search for roadtrips to join</h2>
-            <h5 class="search_form_instructions">Enter as much information as you know. Only (*) fields are required.</h5>
-            <form role="form">
-              <div class="form-group">
-                <label class="search_label" for="textfield_start">Start Location</label>
-                <input type="text" class="form-control" id="textfield_start" >
-              </div>
-              <div class="form-group">
-                <label class="search_label" for="textfield_end">End Location</label>
-                <input type="text" class="form-control" id="textfield_end" >
-              </div>           
-              <div class="form-group">
-                <label class="search_label" for="datepicker_start">Starting on or after</label>
-                <input type='text' class="form-control" id='datetimepicker_start' />
-              </div>   
-            </form>
-          </div> -->
-
         </div>
+
+        <!-- Start a Trip Modal -->
+        <div class="modal fade" id="start-trip-modal" tabindex="-1" role="dialog" aria-labelledby="start-trip-modal-label" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="start-trip-modal-label">Start a Trip</h4>
+              </div>
+
+              <div class="modal-body">
+                <form class="form-horizontal">
+                    
+                    <div class="form-group locations">
+                      <div class="col-md-12">
+                        <div class="form-inline">
+                          <div class="form-group col-md-6">
+                            <input type="text" id="start-trip-modal-start-location" class="form-control" placeholder="Start Location"/>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <input type="text" id="start-trip-modal-end-location" class="form-control" placeholder="End Location"/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group dates">
+                      <div class="col-md-12">
+                        <div class="form-inline">
+                          <div class="form-group col-md-6">
+                            <input type="text" id="start-trip-modal-start-date" class="form-control" placeholder="Start Date"/>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <input type="text" id="start-trip-modal-end-date" class="form-control" placeholder="End Date"/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group companions">
+                      <label for="start-trip-modal-companion-count" class="col-md-4 control-label">I am looking for</label>
+                      <div class="col-md-6">
+                        <select id="start-trip-modal-companion-count" class="form-control">
+                          <option>1 Companion</option>
+                          <option>2 Companions</option>
+                          <option>3 Companions</option>
+                          <option>4+ Companions</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group notes">
+                      <div class="col-md-12">
+                        <textarea id="start-trip-modal-notes" class="form-control" rows="3" placeholder="Notes"></textarea>
+                      </div>
+                    </div>
+
+                    <button type="submit" id="btn-submit-start-trip-modal" class="btn btn-default">Submit</button>
+
+                </form>
+              </div>
+            
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
