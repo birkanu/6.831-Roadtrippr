@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Roadtrippr: Share an adventure.">
+    <meta name="author" content="Birkan Uzun, Dishaan Ahuja, Tuan Tran">
+
+    <title>Roadtrippr</title>
+
+    <!-- CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="js/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link href="css/search.css" rel="stylesheet">
+
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/handlebars-v3.0.1.js"></script>
+    <script src="js/json/road_trips.json"></script>
+    <script src="js/search_results.js"></script>
+
+  </head>
+
+  <body>
+
+
+<div class="container">
+    <hgroup class="mb20">
+        <h1>Matching Roadtrips</h1>
+    </hgroup>
+
+    <hgroup class="mb20">
+        <h1>Inline form here</h1>
+    </hgroup>
+
+    <section id="search_results" class="col-xs-12 col-sm-6 col-md-12">
+        {{#each trips}}
+
+        <article class="search-result row" >
+            <div class="col-xs-12 col-sm-12 col-md-3">
+                <img src="http://lorempixel.com/250/140/people" alt="Lorem ipsum" />
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 excerpet">
+                <h3><a href="#" title="">{{this.trip_name}}</a></h3>
+                <div class="planned_route">
+                <p>
+                    <div class="cities_list">
+                        {{#each this.planned_route}}
+                            {{this}} 
+                            {{#if @last}}
+                            {{else}}
+                                <i class="glyphicon glyphicon-arrow-right"></i>
+                            {{/if}}
+                            
+                        {{/each}}
+                    </div>
+                </p>
+                </div>
+                <div class="dates">
+                    <p>From {{this.start_date}} to {{this.end_date}} ({{this.duration}})</p>
+                </div>
+                <div class="num_companions">
+                    <p>Looking for {{this.num_companions}}</p>
+                </div>                
+            </div>              
+            <div class="col-xs-12 col-sm-12 col-md-3 right">
+                <ul class="meta-search">
+                    <li><i class="glyphicon glyphicon-calendar"></i> <span>02/15/2014</span></li>
+                    <li><i class="glyphicon glyphicon-time"></i> <span>4:28 pm</span></li>
+                    <li><i class="glyphicon glyphicon-tags"></i> <span>People</span></li>
+                </ul>
+            </div>
+            <span class="clearfix borda"></span>         
+        </article>
+        {{/each}}   
+    </section>
+</div>

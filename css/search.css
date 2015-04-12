@@ -1,0 +1,78 @@
+@import "http://fonts.googleapis.com/css?family=Roboto:300,400,500,700";
+
+.container { 
+    margin-top: 20px; 
+}
+.mb20 { 
+    margin-bottom: 20px;
+} 
+
+hgroup { 
+    padding-left: 15px;
+    border-bottom: 1px solid #CCCCCC; 
+}
+hgroup h1 { 
+    font: 500 normal 2em "Roboto",Arial,Verdana,sans-serif; 
+    color: #000000; 
+    margin-top: 0; 
+    line-height: 1.5; 
+}
+
+.search-result .thumbnail { 
+    border-radius: 0 !important;
+    padding-bottom: 20px;
+}
+.search-result:first-child { 
+    margin-top: 0 !important; 
+}
+.search-result { 
+    margin-top: 20px;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.search-result img { 
+    margin-bottom: 20px;
+}
+
+.search-result .right { 
+    border-left: 1px dotted #CCCCCC; 
+    min-height: 150px; 
+}
+.search-result ul { 
+    padding-left: 0 !important; 
+    list-style: none;  
+}
+.search-result ul li { 
+    font: 400 normal .85em "Roboto",Arial,Verdana,sans-serif;  
+    line-height: 1.5;
+}
+.search-result p { 
+    font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; 
+    line-height: 1.5;
+} 
+
+.cities_list {
+    line-height: 1.5;
+    font: normal normal 1.125em "Roboto",Arial,Verdana,sans-serif; 
+}
+
+.search-result ul li i { 
+    padding-right: 5px;
+}
+.search-result .col-md-6 { 
+    position: relative; 
+}
+
+.search-result h3 { 
+    font: 500 normal 1.375em "Roboto",Arial,Verdana,sans-serif; 
+    margin-top: 0 !important; 
+    margin-bottom: 20px !important;
+}
+.search-result h3 > a, .search-result i { 
+    color: #000000 !important; 
+}
+
+.glyphicon-arrow-right {
+    padding-left: 7px;
+    padding-right: 7px;
+}
