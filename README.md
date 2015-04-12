@@ -1,1 +1,1 @@
-# 6.831-Roadtrippr
+# Roadtrippr: Share a new adventure. 
