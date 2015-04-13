@@ -9,6 +9,7 @@ $(document).ready(function() {
 
     for (var i = 0; i < road_trips.length; i++) {
         cur_trip_json = road_trips[i];
+        cur_user = users[i];
         trip = {
             full_route_id: "full_route_"+i,
             abbr_route_id: "abbr_route_"+i,
@@ -20,6 +21,10 @@ $(document).ready(function() {
             duration: cur_trip_json.duration,
             num_companions: cur_trip_json.num_companions,
             map_img_src: "http://dishaan.scripts.mit.edu/map-" + i + ".png",
+            creator_img_src: "http://dishaan.scripts.mit.edu/creator-" + i + ".png",
+            creator_name: cur_user.first_name,
+            creator_age: cur_user.age,
+            creator_location:  cur_user.city,
             map_alt_text: "Route map from " + cur_trip_json.start_location + " to " + cur_trip_json.end_location,
         }
         search_result_context.trips.push(trip);

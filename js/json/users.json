@@ -1,0 +1,36 @@
+users = [
+  {
+    "first_name": "Amanda",
+    "last_name": "Powell",
+    "age": "23",
+    "city": "Chicago, IL",
+  },
+
+  {
+    "first_name": "Trevor",
+    "last_name": "Lahey",
+    "age": "22",
+    "city": "Newton, MA",
+  },
+
+  {
+    "first_name": "Ricky",
+    "last_name": "Julian",
+    "age": "21",
+    "city": "Orange, CA",    
+  },
+
+  {
+    "first_name": "Katie",
+    "last_name": "Murray",
+    "age": "25",
+    "city": "Manhattan, NY",    
+  },
+
+  {
+    "first_name": "Stefan",
+    "last_name": "Farrell",
+    "age": "21",
+    "city": "Cambridge, MA",
+  },       
+]

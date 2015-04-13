@@ -39,7 +39,7 @@ div h1 {
     border-bottom: 1px solid #CCCCCC;
 }
 
-.search-result img { 
+.search-result .map-img { 
     width: 275px;
     height: 140px;
     margin-bottom: 20px;
@@ -103,4 +103,8 @@ div h1 {
 
 .middle {
     padding-left: 30px;
+}
+
+.user_data {
+    padding-left: 25px;
 }
