@@ -44,7 +44,7 @@ var road_trips = [
         "end_location": "Montreal, QC",
         "start_date": "June 2, 2015",
         "end_date": "June 12, 2015",
-        "stops": ["Boston, MA", "White Mountain National Park, NH", "Burlington, VT"],
+        "stops": ["Boston, MA", "White Mountain National Forest, NH", "Burlington, VT"],
         "duration": "10 days",
         "total_distance": "606 miles",        
         "num_companions": "2 companions",
