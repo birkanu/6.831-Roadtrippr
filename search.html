@@ -19,6 +19,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/handlebars-v3.0.1.js"></script>
     <script src="js/json/road_trips.json"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places"></script>    
     <script src="js/search_results.js"></script>
 
   </head>
@@ -34,17 +35,17 @@
     <div class="search_form_inline col-md-12">
         <div class="form-inline">
           <div class="form-group col-md-3">
-            <input type="text" id="start-trip-modal-start-location" class="form-control" placeholder="Start Location"/>
+            <input type="text" id="search-start-location" class="form-control" placeholder="Start Location"/>
           </div>
           <div class="form-group col-md-3">
-            <input type="text" id="start-trip-modal-end-location" class="form-control" placeholder="End Location"/>
+            <input type="text" id="search-end-location" class="form-control" placeholder="End Location"/>
           </div>
         </div>
         <div class="form-group col-md-3">
-            <input type="text" id="start-trip-modal-start-date" class="form-control" placeholder="Start Date"/>
+            <input type="text" id="search-start-date" class="form-control" placeholder="Start Date"/>
         </div>
         <div class="form-group col-md-3">
-            <input type="text" id="start-trip-modal-end-date" class="form-control" placeholder="End Date"/>        
+            <input type="text" id="search-end-date" class="form-control" placeholder="End Date"/>        
         </div>
     </div>
 

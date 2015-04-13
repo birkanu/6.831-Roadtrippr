@@ -42,5 +42,26 @@ $(document).ready(function() {
         });        
     }
 
+    // Add autocomplete to location text fields
+    var autocomplete_start_location = new google.maps.places.Autocomplete(
+        (document.getElementById('search-start-location')),
+        { types: ['geocode'] }
+    );
+    var start_location;
+    google.maps.event.addListener(autocomplete_start_location, 'place_changed', function() {
+        // Get the place details from the autocomplete object.
+        start_location = autocomplete_start_location.getPlace();
+    });
+    // Create the autocomplete object for end location, restricting the search to geographical location types.
+    var autocomplete_end_location = new google.maps.places.Autocomplete(
+        (document.getElementById('search-end-location')),
+        { types: ['geocode'] }
+    );
+    var end_location;
+    google.maps.event.addListener(autocomplete_end_location, 'place_changed', function() {
+        // Get the place details from the autocomplete object.
+        end_location = autocomplete_end_location.getPlace();
+    });
+
 
 });
