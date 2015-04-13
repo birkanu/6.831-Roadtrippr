@@ -79,9 +79,6 @@ body {
   text-shadow: none;
   background-color: #fff;
   border: 2px solid #000;
-}
-
-.btn:focus {
   outline: none;
 }
 
@@ -90,12 +87,22 @@ body {
   font-weight: bold;
 }
 
+.modal-open .modal {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  overflow-y: scroll;
+}
+
 .form-inline .form-group {
   margin-left: 0;
   margin-right: 0;
 }
 
 .form-inline .form-control {
+  width: 100%;
+}
+
+.form-inline .input-group {
   width: 100%;
 }
 
@@ -108,4 +115,21 @@ body {
 .notes .form-control {
   margin-left: 15px;
   width: 95%;
+  resize: vertical;
+}
+
+.errorMessageLabel {
+  margin-left: 30px; 
+}
+
+.flexible-dates {
+  margin-left: 30px;
+}
+
+.form-horizontal .checkbox {
+  margin-top: 33px;
+}
+
+.pac-container { 
+  z-index: 10000;
 }
