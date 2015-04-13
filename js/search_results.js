@@ -63,5 +63,31 @@ $(document).ready(function() {
         end_location = autocomplete_end_location.getPlace();
     });
 
+    // Add a calendar for date fields
+    $('#search-start-date').datetimepicker({
+        locale: 'en',
+        format: 'MMMM DD, YYYY'
+    });
+    $('#search-end-date').datetimepicker({
+        locale: 'en',
+        format: 'MMMM DD, YYYY'
+    });
+
+    // Link the date pickers 
+    var start_date;
+    $("#search-start-date").on("dp.change", function (e) {
+        if (e.date) {
+            start_date = e.date;
+            $('#search-end-date').data("DateTimePicker").minDate(e.date);
+        }
+    });
+    var end_date;
+    $("#search-end-date").on("dp.change", function (e) {
+        if (e.date) {
+            end_date = e.date;
+            $('#search-start-date').data("DateTimePicker").maxDate(e.date);
+        }
+    });    
+
 
 });
