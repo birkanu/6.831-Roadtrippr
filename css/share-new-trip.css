@@ -68,11 +68,6 @@ body {
   z-index: 10000;
 }
 
-.submit-buttons {  
-  position: fixed; 
-  bottom: 0;
-}
-
 #edit-trip-container .lead {
   line-height: 0.9;
   font-size: 17px;

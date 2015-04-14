@@ -46,7 +46,7 @@
             <p class="lead locations"><b>Stops:</b></p>
             <div id="stops" class="list-group">
               {{#each stops}}
-                <div class="list-group-item">
+                <div class="list-group-item stop-group-item">
                   <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
                   <span class="stop" aria-hidden="true">{{this.formatted_address}}</span>
                   <span class="glyphicon glyphicon-remove remove-stop" style="float:right"></span>
@@ -124,7 +124,7 @@
             </form> 
           </div>
           <div class="submit-buttons">
-            <p class="text-right">
+            <p class="text-center">
               <button type="button" class="btn btn-default btn-lg" id="btn-edit-trip-details">Edit Trip Details</button>
               <button type="button" class="btn btn-default btn-lg" id="btn-share-trip">Share My Trip</button>
             </p>

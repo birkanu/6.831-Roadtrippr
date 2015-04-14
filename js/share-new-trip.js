@@ -31,7 +31,7 @@ $(document).ready(function() {
 	sortable = new Sortable(stops, {
 		handle: '.glyphicon-menu-hamburger',
 	  	animation: 150,
-	    onUpdate: function (evt) {
+	    onEnd: function (evt) {
 	    	var old_index = evt.oldIndex;
 	    	var new_index = evt.newIndex;
 	    	var dragged_element = new_trip_details.stops[old_index];
@@ -78,14 +78,24 @@ $(document).ready(function() {
 
 	$(document.body).on('click', '#btn-add-new-stop' ,function() {
 		if (new_stop && $("#new-stop").val() != '') {
-			new_trip_details.stops.push(new_stop);
-			$( "#stops" ).append( 
-              '<div class="list-group-item">' +
-                '<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>' +
-                '<span class="stop" aria-hidden="true"> ' + new_stop.formatted_address + '</span>' +
-                '<span class="glyphicon glyphicon-remove remove-stop" style="float:right"></span>' +
-              '</div>'
-			);
+			if (new_trip_details.stops.length < 2) {
+				new_trip_details.stops.push(new_stop);
+				$( "#stops" ).append( 
+	              '<div class="list-group-item">' +
+	                '<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>' +
+	                '<span class="stop" aria-hidden="true"> ' + new_stop.formatted_address + '</span>' +
+	                '<span class="glyphicon glyphicon-remove remove-stop" style="float:right"></span>' +
+	              '</div>'
+				);
+			} else {
+				new_trip_details.stops.splice(new_trip_details.stops.length - 1, 0, new_stop);	
+				var new_stop_html = '<div class="list-group-item">' +
+                						'<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>' +
+                						'<span class="stop" aria-hidden="true"> ' + new_stop.formatted_address + '</span>' +
+                						'<span class="glyphicon glyphicon-remove remove-stop" style="float:right"></span>' +
+              						'</div>';
+				$(new_stop_html).insertBefore( $(".stop-group-item").last() );	
+			}
 			$("#new-stop").val('');
 			reroute();
 		}
@@ -139,7 +149,7 @@ $(document).ready(function() {
 		sortable = new Sortable(stops, {
 			handle: '.glyphicon-menu-hamburger',
 		  	animation: 150,
-		    onUpdate: function (evt) {
+		    onEnd: function (evt) {
 		    	var old_index = evt.oldIndex;
 		    	var new_index = evt.newIndex;
 		    	var dragged_element = new_trip_details.stops[old_index];
@@ -206,7 +216,6 @@ $(document).ready(function() {
 		} else {
 			$(this).text("Edit Trip Details");	
 			$('#btn-share-trip').text("Share My Trip");
-			console.log("setting trip details")
 			setTripDetails();
 		}
 		$("#trip-details, #edit-trip-container").toggle();
