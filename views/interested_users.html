@@ -18,6 +18,7 @@
   <body>
 
     <div class="container">
+
       <div class="row">
         <h1>Roadtrippr</h1>
       </div>
@@ -28,38 +29,16 @@
         <div class='col-md-12'>
           <div class="carousel slide media-carousel" id="media">
             <div class="carousel-inner">
-
-              <div class="item active">
-                <div class="row">
-                  <div class="col-md-4">
-                    <a class="thumbnail" href="../user_profile_modals/ahmet.html#ahmetModal" data-toggle="modal" data-target="#ahmetModal"><img alt="" src="https://scontent-ord.xx.fbcdn.net/hphotos-xat1/v/t1.0-9/1514604_951879864824565_8937567387556803475_n.jpg?oh=d36fb6bb383283d75b6d1d6f6085025e&oe=5597B844" name="aboutme"></a>
-                    <center><h3>Ahmet</h3></center>
-                  </div>          
-                  <div class="col-md-4">
-                    <a class="thumbnail" href="#"><img alt="" src="https://scontent-ord.xx.fbcdn.net/hphotos-xpf1/v/t1.0-9/10959013_913425708688987_5798609419620842076_n.jpg?oh=512020bce9d5c7fcc37d87d6ac082b7b&oe=55E5E847"></a>
-                    <center><h3>Emily</h3></center>
-                  </div>
-                  <div class="col-md-4">
-                    <a class="thumbnail" href="#"><img alt="" src="https://scontent-ord.xx.fbcdn.net/hphotos-xta1/v/t1.0-9/11133655_974277185939473_4701004588398765320_n.jpg?oh=03b48b7fca1c498133ccc720afcecd79&oe=55A7C4EA"></a>
-                    <center><h3>Arianny</h3></center>
-                  </div>        
-                </div>
-              </div>
-
               <div class="item">
                 <div class="row">
-                  <div class="col-md-4">
-                    <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/150x150"></a>
-                  </div>          
-                  <div class="col-md-4">
-                    <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/150x150"></a>
-                  </div>
-                  <div class="col-md-4">
-                    <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/150x150"></a>
-                  </div>        
+                  {{#each users}}
+                    <div class="col-md-4">
+                      <a class="thumbnail" href="#" data-toggle="modal" data-target="#user-modal{{index}}"><img alt="" src={{photo}}></a>
+                      <center><h3>{{first_name}} {{last_name}}</h3></center>
+                    </div>   
+                  {{/each}}           
                 </div>
               </div>
-
             </div>
             <a data-slide="prev" href="#media" class="left carousel-control">‹</a>
             <a data-slide="next" href="#media" class="right carousel-control">›</a>
@@ -67,42 +46,48 @@
         </div>
       </div>
 
-      <div class="modal fade" id="ahmetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <center>
-                    <img src="https://scontent-ord.xx.fbcdn.net/hphotos-xat1/v/t1.0-9/1514604_951879864824565_8937567387556803475_n.jpg?oh=d36fb6bb383283d75b6d1d6f6085025e&oe=5597B844" name="aboutme" width="140" height="140" border="0" class="img-circle">
-                    <br>
-                    <span class="label label-warning">CHAT</span><br>
-                    <span class="label label-success">ADD TO MAYBES</span><br>
-                    <span class="label label-info">VIEW PROFILE</span>
-                  </center>
+      <div id="modal-container">
+        {{#each users}}
+          <div class="modal fade" id="user-modal{{index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <center>
+                        <img src="{{photo}}" name="aboutme" width="140" height="140" border="0" class="img-circle">
+                        <br>
+                        <span class="label label-warning">CHAT</span><br>
+                        <span class="label label-success">ADD TO MAYBES</span><br>
+                        <span class="label label-info">VIEW PROFILE</span>
+                      </center>
+                    </div>
+                    <div class="col-md-6">
+                      <h3 class="media-heading">{{first_name}} {{last_name}}, {{age}}</h3>
+                      <h5 class="media-heading">{{city}}</h5>
+                      <br>
+                      <h5 class="media-heading">NOTE TO YOU</h5>{{note}}
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-6">
-                  <h3 class="media-heading">Ahmet, 21</h3>
-                  <h5 class="media-heading">Pimp</h5>
-                  <br>
-                  <h5 class="media-heading">NOTE TO YOU</h5>
-                  Hello!
+                <div class="modal-footer">
+                  <center>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </center>
                 </div>
               </div>
             </div>
-            <div class="modal-footer">
-              <center>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </center>
-            </div>
           </div>
-        </div>
+        {{/each}}
       </div>
+
     </div>
     <!-- JavaScript -->
     <script src="../js/jquery-2.1.3.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/handlebars-v3.0.1.js"></script>
     <script src="../js/interested_users.js"></script>
+    <script src="../js/json/users.json"></script>
 
   </body>
 
