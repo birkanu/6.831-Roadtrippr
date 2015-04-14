@@ -135,12 +135,12 @@ $(document).ready(function() {
         if (!e.isDefaultPrevented()) {
             e.preventDefault();
             var searched_trip = {}
-            new_trip.start_location = start_location_find_modal;
-            new_trip.end_location = end_location_find_modal;
-            new_trip.start_date = start_date_find_modal;
-            new_trip.end_date = end_date_find_modal;
-            new_trip.are_dates_flexible = $('#flexible-dates-checkbox-find-modal').is(":checked") ? true : false;
-            if (!start_location || !end_location) {
+            searched_trip.start_location = start_location_find_modal;
+            searched_trip.end_location = end_location_find_modal;
+            searched_trip.start_date = start_date_find_modal;
+            searched_trip.end_date = end_date_find_modal;
+            searched_trip.are_dates_flexible = $('#flexible-dates-checkbox-find-modal').is(":checked") ? true : false;
+            if (!start_location_find_modal || !end_location_find_modal) {
                 $(".errorMessage").show();
             } else {
                 localStorage.setItem('searched_trip', JSON.stringify(searched_trip));
