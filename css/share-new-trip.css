@@ -20,12 +20,104 @@ body {
   padding: 0px;
 }
 
-.btn-default,
-.btn-default:hover,
-.btn-default:focus {
+.site-wrapper .col-md-4 {
+  height: 100%;
+}
+
+.submit-buttons .btn-default,
+.submit-buttons .btn-default:hover,
+.submit-buttons .btn-default:focus {
   color: #000;
   text-shadow: none;
   background-color: #fff;
   border: 2px solid #000;
   outline: none;
+}
+
+#trip-details .companion-count,
+#trip-details .trip-dates,
+#trip-details .notes,
+#trip-details .locations {
+  font-size: 17px;
+}
+
+#trip-details .lead {
+  line-height: 0.9;
+}
+
+.trip-name {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: !important 20px;
+}
+
+#stops .stop {
+  margin-left: 10px;
+}
+
+.glyphicon-menu-hamburger {
+  cursor: move;
+  cursor: -webkit-grabbing;
+}
+
+.glyphicon-remove {
+  cursor: pointer;  
+}
+
+.pac-container { 
+  z-index: 10000;
+}
+
+.submit-buttons {  
+  position: fixed; 
+  bottom: 0;
+}
+
+#edit-trip-container .lead {
+  line-height: 0.9;
+  font-size: 17px;
+}
+
+.form-inline .form-group {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.form-inline .form-control {
+  width: 100%;
+}
+
+.form-inline .input-group {
+  width: 100%;
+}
+
+.trip-name .form-control{
+  margin-left: 15px;
+  width: 94.4%;
+  font-weight: normal;
+}
+
+.companions .control-label {
+  padding-left: 30px;
+  margin-right: -50px;
+  text-align: left;
+}
+
+.edit-message {
+  margin-left: 15px;
+  margin-top: 20px;
+}
+
+.notes .form-control {
+  margin-left: 15px;
+  width: 94.4%;
+  resize: vertical;
+}
+
+.flexible-dates {
+  margin-left: 30px;
+}
+
+.form-horizontal .checkbox {
+  margin-top: 33px;
 }
