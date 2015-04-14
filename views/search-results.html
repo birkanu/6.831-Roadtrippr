@@ -24,7 +24,8 @@
                 <h1>Matching Roadtrips</h1>
             </div>
 
-            <div class="search_form_inline col-md-12">
+            <div class="search_form_inline col-md-12" id="search-inline-form">
+
                 <div class="form-inline">
                   <div class="form-group col-md-3">
                     <input type="text" id="search-start-location" class="form-control" placeholder="Start Location"/>
@@ -50,9 +51,13 @@
                         <input type="checkbox" id="flexible-dates-checkbox"> Flexible dates
                     </label>
                 </div>
+                <div class="btn-update form-group col-md-3">
+                    <button type="submit" id="btn-update-search" class="btn btn-default">Update</button>
+                </div>                    
             </div>
 
             <section id="search_results" class="col-xs-12 col-sm-6 col-md-12">
+
                 {{#each trips}}
 
                 <article class="search-result row" >
@@ -112,6 +117,10 @@
                     <span class="clearfix borda"></span>         
                 </article>
                 {{/each}}   
+
+                <div id="spinner_container" class="spinner_div">
+                
+                </div>
             </section>
         </div>
 
@@ -120,6 +129,7 @@
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/moment.js"></script>
         <script src="../js/validator.min.js"></script>
+        <script src="../js/spin.min.js"></script>
         <script src="../js/datetimepicker.min.js"></script>    
         <script src="../js/handlebars-v3.0.1.js"></script>
         <script src="../js/json/road_trips.json"></script>
