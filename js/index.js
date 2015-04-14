@@ -82,5 +82,24 @@ $(document).ready(function() {
 			}
   		} 
 	});
+
+  // Select random user to be the current user.
+  var random_user_index;
+  if ( (random_user_index = localStorage.getItem('current_user_index')) == null) {
+    random_user_index = Math.floor(Math.random()*users.length);
+    localStorage.setItem('current_user_index', random_user_index);
+  }
+
+  var random_road_trip_index;
+  if ( (random_road_trip_index = localStorage.getItem('random_road_trip_index')) == null) {
+    random_road_trip_index = Math.floor(Math.random()*road_trips.length);
+    localStorage.setItem('current_road_trip_index', random_road_trip_index);
+  }
+
+  // Select random road trip for the current user.
+  var random_road_trip_index = Math.floor(Math.random()*road_trips.length);
+  localStorage.setItem('current_road_trip_index', random_road_trip_index);
+
+  $("#current_user").html(users[random_user_index].first_name + " " + users[random_user_index].last_name);
     
 });
