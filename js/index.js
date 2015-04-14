@@ -40,6 +40,10 @@ $(document).ready(function() {
         (document.getElementById('find-trip-modal-start-location')),
         { types: ['geocode'] }
     );
+
+    $('#find-trip-modal-start-location').val("");
+    $('#find-trip-modal-end-location').val("");
+
     var start_location_find_modal;
     google.maps.event.addListener(autocomplete_start_location_find_modal_find_modal, 'place_changed', function() {
         // Get the place details from the autocomplete object.

@@ -1,5 +1,13 @@
 $(document).ready(function() {
 
+    // Get search params to populate inline form
+    var search_parameters = JSON.parse(localStorage.getItem('searched_trip'));
+    $('#search-start-location').val(search_parameters.start_location.formatted_address);
+    $('#search-end-location').val(search_parameters.end_location.formatted_address);
+    $('#search-start-date').val(search_parameters.start_date);
+    $('#search-end-date').val(search_parameters.end_date);
+    $('#flexible-dates-checkbox').prop('checked', search_parameters.are_dates_flexible);
+
     // Populate dummy search results
     var search_result_source = $("#search_results").html();
     var search_result_template = Handlebars.compile(search_result_source);
@@ -92,6 +100,8 @@ $(document).ready(function() {
             end_date = e.date;
             $('#search-start-date').data("DateTimePicker").maxDate(e.date);
         }
-    });    
+    });  
+
+
 
 });
