@@ -167,8 +167,10 @@ $(document).ready(function() {
 		// Dates
 		$('#edit-trip-form-start-date').data("DateTimePicker").date(new_trip_details.start_date);
 		start_date = new_trip_details.start_date;
+		$('#edit-trip-form-end-date').data("DateTimePicker").minDate(start_date);
 		$('#edit-trip-form-end-date').data("DateTimePicker").date(new_trip_details.end_date);
 		end_date = new_trip_details.end_date;
+		$('#edit-trip-form-start-date').data("DateTimePicker").maxDate(end_date);
 	    // Flexible Dates
 	    if (new_trip_details.are_dates_flexible) {
 	    	$('#flexible-dates-checkbox').prop('checked', true);
@@ -225,14 +227,16 @@ $(document).ready(function() {
 	var isFormValid;
 	$('#edit-trip-form').validator().on('invalid.bs.validator', function (e) {
 		isFormValid = false;
+		console.log("form invalid");
 	})
 	$('#edit-trip-form').validator().on('valid.bs.validator', function (e) {
 		isFormValid = true;
+		console.log("form valid");
 	})
 
 	$('#btn-share-trip').click(function() {
 		if ($("#edit-trip-container").is(":visible")) {
-			$('#edit-trip-form').validator('validate');
+			// $('#edit-trip-form').validator('validate');
 			if (isFormValid) {
 				$(this).text("Share My Trip");
 				$('#btn-edit-trip-details').text("Edit Trip Details");
