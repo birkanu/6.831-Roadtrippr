@@ -87,6 +87,11 @@ body {
   font-weight: bold;
 }
 
+#btn-submit-find-trip-modal {
+  margin-left: 15px;
+  font-weight: bold;
+}
+
 .modal-open .modal {
   padding-left: 0px !important;
   padding-right: 0px !important;
