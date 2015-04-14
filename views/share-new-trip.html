@@ -15,17 +15,6 @@
     <link href="../css/datetimepicker.min.css" rel="stylesheet">
     <link href="../css/share-new-trip.css" rel="stylesheet">
 
-  </head>
-
-  <body>
-
-    <div class="site-wrapper">
-      <div class="row">
-        <div class="col-md-4 trip-details"></div>
-        <div class="col-md-8" id="map-canvas"></div>
-      </div>
-    </div>
-
     <!-- JavaScript -->
     <script src="../js/jquery-2.1.3.min.js"></script>
     <script src="../js/moment.js"></script>
@@ -34,7 +23,116 @@
     <script src="../js/datetimepicker.min.js"></script>
     <script src="../js/handlebars-v3.0.1.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+    <script src="../js/sortable.min.js"></script>
     <script src="../js/share-new-trip.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+      <div class="row">
+        <div class="col-md-4">
+          <div id="trip-details">
+            <p class="lead text-center trip-name">{{name}}</p>
+            <hr>
+            <p class="lead text-center trip-dates">From {{start_date}} To {{end_date}} ({{duration}})</p>
+            {{#if are_dates_flexible}}
+              <p class="text-center"><em>You are flexible with your dates.</em></p>
+            {{/if}}
+            <hr>
+            <p class="lead text-center companion-count">Looking for {{companion_count}}</p>
+            <hr>
+            <p class="lead locations"><b>Stops:</b></p>
+            <div id="stops" class="list-group">
+              {{#each stops}}
+                <div class="list-group-item">
+                  <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+                  <span class="stop" aria-hidden="true">{{this.formatted_address}}</span>
+                  <span class="glyphicon glyphicon-remove remove-stop" style="float:right"></span>
+                </div>
+              {{/each}}
+            </div>
+            <div class="input-group">
+              <input type="text" id="new-stop" class="form-control location" placeholder="Add New Stop"/>
+              <span class="input-group-btn">
+                <button class="btn btn-default" id="btn-add-new-stop" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </span>
+            </div>
+            <hr>
+            <p class="lead notes"><b>Notes:</b> {{notes}}</p>
+            <hr>
+            <div class="buttons"></div>
+          </div>
+          <div id="edit-trip-container" style="display:none;">
+            <form class="form-horizontal" id="edit-trip-form">
+              <p class="lead edit-message">Edit Trip Details other than the stops:</p>
+              <div class="form-group trip-name">
+                <div class="col-md-12">
+                  <div class="form-inline">  
+                    <input type="text" id="edit-trip-form-trip-name" class="form-control" placeholder="Trip Name" required/>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group dates">
+                <div class="col-md-12">
+                  <div class="form-inline">
+                    <div class="form-group col-md-6">
+                      <div class='input-group date' id='edit-trip-form-start-date'>
+                        <input type='text' class="form-control" required/>
+                        <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <div class='input-group date' id='edit-trip-form-end-date'>
+                        <input type='text' class="form-control" required/>
+                        <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="checkbox flexible-dates">
+                  <label>
+                    <input type="checkbox" id="flexible-dates-checkbox"> I am flexible with the dates.
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group companions">
+                <label for="edit-trip-form-companion-count" class="col-md-4 control-label">I am looking for</label>
+                <div class="col-md-6">
+                  <select id="edit-trip-form-companion-count" class="form-control">
+                    <option value="1 Companion">1 Companion</option>
+                    <option value="2 Companions">2 Companions</option>
+                    <option value="3 Companions">3 Companions</option>
+                    <option value="4+ Companions">4+ Companions</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group notes">
+                <div class="col-md-12">
+                  <textarea id="edit-trip-form-notes" class="form-control" rows="3" placeholder="Notes"></textarea>
+                </div>
+              </div>
+
+            </form> 
+          </div>
+          <div class="submit-buttons">
+            <p class="text-right">
+              <button type="button" class="btn btn-default btn-lg" id="btn-edit-trip-details">Edit Trip Details</button>
+              <button type="button" class="btn btn-default btn-lg" id="btn-share-trip">Share My Trip</button>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-8" id="map-canvas"></div>
+      </div>
+    </div>
 
   </body>
 
