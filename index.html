@@ -28,10 +28,73 @@
             <p class="lead">SHARE A NEW ADVENTURE</p>
             <p class="lead">
               <a href="#" id="btn-start-trip" class="btn btn-lg btn-default" data-toggle="modal" data-target="#start-trip-modal">Start a Trip</a>
-              <a href="#" id="btn-find-trip" class="btn btn-lg btn-default">Find a Trip</a>
+              <a href="#" id="btn-find-trip" class="btn btn-lg btn-default" data-toggle="modal" data-target="#find-trip-modal">Find a Trip</a>
             </p>
           </div>
         </div>
+
+        <!-- Find a Trip Modal -->
+        <div class="modal fade" id="find-trip-modal" role="dialog" aria-labelledby="find-trip-modal-label" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title text-center" id="find-trip-modal-label">Find a Trip</h4>
+              </div>
+
+              <div class="modal-body">
+                <form class="form-horizontal" id="find-trip-form">
+                    
+                    <div class="form-group has-error has-feedback errorMessage" style="display:none;">
+                      <label class="control-label errorMessageLabel">Please enter a valid location.</label>
+                    </div>
+
+                    <div class="form-group locations">
+                      <div class="col-md-12">
+                        <div class="form-inline">
+                          <div class="form-group col-md-6">
+                            <input type="text" id="find-trip-modal-start-location" class="form-control location" placeholder="Start Location" required/>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <input type="text" id="find-trip-modal-end-location" class="form-control location" placeholder="End Location" required/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group dates">
+                      <div class="col-md-12">
+                        <div class="form-inline">
+                          <div class="form-group col-md-6">
+                            <div class="input-group">
+                              <input type="text" id="find-trip-modal-start-date" class="form-control" placeholder="Start Date" required/>
+                              <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></div>
+                            </div>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <div class="input-group">
+                              <input type="text" id="find-trip-modal-end-date" class="form-control" placeholder="End Date" required/>
+                              <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="checkbox flexible-dates">
+                        <label>
+                          <input type="checkbox" id="flexible-dates-checkbox-find-modal"> I am flexible with the dates.
+                        </label>
+                      </div>
+                    </div>
+
+                    <button type="submit" id="btn-submit-find-trip-modal" class="btn btn-default">Find Matching Trips</button>
+
+                </form>
+              </div>
+            
+            </div>
+          </div>
+        </div>        
 
         <!-- Start a Trip Modal -->
         <div class="modal fade" id="start-trip-modal" role="dialog" aria-labelledby="start-trip-modal-label" aria-hidden="true">
