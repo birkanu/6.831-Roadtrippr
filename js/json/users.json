@@ -11,6 +11,7 @@ users = [
     "six_things": "phone, book, makeup, earphones, credit card, spare clothes",
     "best_places": "Cancun, Rome",
     "note": "Say hello! I would love to meet new people to go on road trips with!",
+    "interested_trips": "0,1",
     "index": 0
   },
 
@@ -26,6 +27,7 @@ users = [
     "six_things": "laptop, book, eye mask, ear plugs, Q-tips, phone",
     "best_places": "Cambodia, Malaysia",
     "note": "Since this will be my first time doing a road trip, I'm very flexible!",
+    "interested_trips": "0,2",
     "index": 1
   },
 
@@ -41,6 +43,7 @@ users = [
     "six_things": "iPod, sweat bands, earphones, dance shoes, telescope, candy",
     "best_places": "Paris, Amsterdam",
     "note": "I have lots of experience with road trips so feel free to ask me for tips as well!",
+    "interested_trips": "0,1,2",
     "index": 2
   },
 
@@ -56,6 +59,7 @@ users = [
     "six_things": "phone, laptop, external battery pack, flashlight, glasses, contacts",
     "best_places": "Hawaii, Puerto Rico",
     "note": "I'm looking forward to meeting new couples wanting to go on road trips together!",
+    "interested_trips": "2,3",
     "index": 3    
   },
 
@@ -71,6 +75,7 @@ users = [
     "six_things": "comic books, Nintendo DS, phone, Rubik's cube, laptop, protein shaker cup",
     "best_places": "Dominican Republic, Haiti",
     "note": "I'm a really outgoing guy and my friends say I'm fun to be around with! Let me know if you're interested in joining me!",
+    "interested_trips": "0,3,4",
     "index": 4
   },       
 ]
