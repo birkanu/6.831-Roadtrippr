@@ -1,9 +1,25 @@
+/* Source: https://css-tricks.com/snippets/javascript/get-url-variables/ */
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+         var pair = vars[i].split("=");
+         if(pair[0] == variable){return pair[1];}
+ }
+ return(false);
+}
+
 $(document).ready(function() {
 
   var user_source = $(".container").html();
   var user_template = Handlebars.compile(user_source);
 
-  var current_user = users[parseInt(localStorage.getItem('current_user_index'))];
+  var user = getQueryVariable("user");
+  if (user) {
+    var current_user = users[parseInt(user)];
+  } else {
+    var current_user = users[parseInt(localStorage.getItem('current_user_index'))];
+  }
   $(".container").html(user_template(current_user));
 
 });
