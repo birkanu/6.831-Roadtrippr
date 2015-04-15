@@ -53,8 +53,18 @@ $(document).ready(function() {
     $(".carousel-control").hide();
   }
 
-  var interested_road_trip = road_trips[localStorage.getItem('current_road_trip_index')];
-  $(".interested_road_trip").html(interested_road_trip["trip_name"]);
+  var current_road_trip_indices = localStorage.getItem("current_road_trip_indices").split(",");
+  var interested_road_trips = "";
+
+  for (var i = 0; i < current_road_trip_indices.length; i++) {
+    var interested_road_trip = road_trips[parseInt(current_road_trip_indices[i])];
+    interested_road_trips = interested_road_trips + interested_road_trip["trip_name"];
+    if ( (i != current_road_trip_indices.length-1) && (current_road_trip_indices.length > 1)) {
+      interested_road_trips += ", ";
+    }
+  }
+
+  $(".interested_road_trip").html(interested_road_trips);
 
   $('#media').carousel({
     pause: true,
@@ -72,7 +82,7 @@ $(document).ready(function() {
       $(this).find('.modal-content').css("margin-top", top);
     });
   }
-  
+
   $('.modal').on('show.bs.modal', centerModals);
   $(window).on('resize', centerModals);
 

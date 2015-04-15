@@ -148,9 +148,17 @@ $(document).ready(function() {
     localStorage.setItem('current_road_trip_index', random_road_trip_index);
   }
 
-  // Select random road trip for the current user.
-  var random_road_trip_index = Math.floor(Math.random()*road_trips.length);
-  localStorage.setItem('current_road_trip_index', random_road_trip_index);
+  // Select random road trips for the current user.
+  var NUM_ROAD_TRIPS = 2;
+  var random_road_trip_indices = [];
+  for (var i = 0; i < NUM_ROAD_TRIPS; i++) {
+    var idx = Math.floor(Math.random()*road_trips.length);
+    while (random_road_trip_indices.indexOf(idx) != -1) {
+      idx = Math.floor(Math.random()*road_trips.length);
+    }
+    random_road_trip_indices.push(idx);
+  }
+  localStorage.setItem('current_road_trip_indices', random_road_trip_indices.toString());
 
   $("#current_user").html(users[random_user_index].first_name + " " + users[random_user_index].last_name);
   
