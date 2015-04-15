@@ -158,6 +158,11 @@ $(document).ready(function() {
   }
 
   $("#current_user").html(users[random_user_index].first_name + " " + users[random_user_index].last_name);
+
+  var user_menu_source = $("#user-menu").html();
+  var user_menu_template = Handlebars.compile(user_menu_source);
+  var user_menu_source_processed = user_menu_template ({name: users[random_user_index].first_name});
+  $("#user-menu").html(user_menu_source_processed);
   
   $('#find-trip-form').validator().on('submit', function (e) {
       if (!e.isDefaultPrevented()) {

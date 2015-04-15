@@ -24,6 +24,10 @@ div h1 {
     line-height: 1.5; 
 }
 
+#search_results {
+    margin-top: 20px;
+}
+
 .search-result .thumbnail { 
     border-radius: 0 !important;
     padding-bottom: 20px;
