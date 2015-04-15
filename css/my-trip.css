@@ -18,6 +18,11 @@ div h1 {
     line-height: 1.5; 
 }
 
+.interested_users {
+    display: table-cell;
+    vertical-align: middle;
+}
+
 #search_results {
     margin-top: 20px;
 }
@@ -42,6 +47,7 @@ div h1 {
 .search-result .right { 
     border-left: 1px dotted #CCCCCC; 
     min-height: 150px; 
+    display: table;
 }
 .search-result ul { 
     padding-left: 0 !important; 

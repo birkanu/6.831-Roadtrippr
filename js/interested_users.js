@@ -1,3 +1,14 @@
+/* Source: https://css-tricks.com/snippets/javascript/get-url-variables/ */
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1);
+  var vars = query.split("&");
+  for (var i=0;i<vars.length;i++) {
+         var pair = vars[i].split("=");
+         if(pair[0] == variable){return pair[1];}
+ }
+ return(false);
+}
+
 $(document).ready(function() {
 
   // var current_road_trip_indices = localStorage.getItem("current_road_trip_indices").split(",");
@@ -13,7 +24,7 @@ $(document).ready(function() {
 
   // $(".interested_road_trip").html(interested_road_trips);
 
-  var current_trip_idx = 0; // Get this parameter from the My Trips page
+  var current_trip_idx = parseInt(getQueryVariable("trip_index")); // Get this parameter from the My Trips page
   $("#trip_name").html(road_trips[current_trip_idx]["trip_name"]);
   var current_user_index = parseInt(localStorage.getItem('current_user_index'));
   var user_source = $(".carousel-inner").html();

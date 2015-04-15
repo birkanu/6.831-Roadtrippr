@@ -23,7 +23,7 @@
             <div class="heading">
                 <h1>My Roadtrips</h1>
             </div>
-
+            <div class="alert alert-success trip-creation" role="alert" style="display:none;">You have successfully added a new trip.</div>
             <section id="search_results" class="col-xs-12 col-sm-6 col-md-12">
 
                 {{#each trips}}
@@ -70,8 +70,14 @@
                         </div>
                         <div class="num_companions">
                             <p>Looking for {{this.num_companions}}</p>
-                        </div>                
-                    </div>              
+                        </div>    
+                                
+                    </div>           
+                    <div class="col-xs-12 col-sm-12 col-md-2 right">
+                         <div class="interested_users">
+                          <a href="interested_users.html?trip_index={{index}}">See Interested Users</a>
+                        </div> 
+                    </div>
                     <span class="clearfix borda"></span>         
                 </article>
             </a>
