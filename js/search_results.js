@@ -159,12 +159,18 @@ $(document).ready(function() {
         var full_route_div = $("#full_route_"+j);
         var abbr_route_div = $("#abbr_route_"+j);
         full_route_div.offset({left: full_route_div.offset().left, top: abbr_route_div.offset().top});
-        abbr_route_div.hover(function(e) {
+        full_route_div.toggle();
+        abbr_route_div.mouseenter(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             var full_route_div_id = this.id.replace("abbr", "full");
-            $("#"+full_route_div_id).css("visibility", "visible");
-        }, function(e) {
+            $("#"+full_route_div_id).fadeIn(500);
+        });
+        full_route_div.mouseleave(function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             var full_route_div_id = this.id.replace("abbr", "full");
-            $("#"+full_route_div_id).css("visibility", "hidden");            
+            $("#"+full_route_div_id).fadeOut(500);            
         });        
     }
 

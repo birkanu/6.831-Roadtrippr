@@ -13,7 +13,7 @@
         <!-- CSS -->
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/datetimepicker.min.css" rel="stylesheet" />
-        <link href="../css/search-results.css" rel="stylesheet">
+        <link href="../css/my-trips.css" rel="stylesheet">
 
     </head>
 
@@ -21,39 +21,7 @@
 
         <div class="container">
             <div class="heading">
-                <h1>Matching Roadtrips</h1>
-            </div>
-
-            <div class="search_form_inline col-md-12" id="search-inline-form">
-
-                <div class="form-inline">
-                  <div class="form-group col-md-3">
-                    <input type="text" id="search-start-location" class="form-control" placeholder="Start Location"/>
-                  </div>
-                  <div class="form-group col-md-3">
-                    <input type="text" id="search-end-location" class="form-control" placeholder="End Location"/>
-                  </div>
-                </div>
-                <div class="form-group col-md-3">
-                    <div class="input-group">
-                        <input type="text" id="search-start-date" class="form-control" placeholder="Start Date"/>
-                        <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></div>
-                    </div>
-                </div>
-                <div class="form-group col-md-3">
-                    <div class="input-group">
-                        <input type="text" id="search-end-date" class="form-control" placeholder="End Date"/>
-                        <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></div>
-                    </div>        
-                </div>
-                <div class="checkbox flexible-dates form-group col-md-3">
-                    <label>
-                        <input type="checkbox" id="flexible-dates-checkbox"> Flexible dates
-                    </label>
-                </div>
-                <div class="btn-update form-group col-md-3">
-                    <button type="submit" id="btn-update-search" class="btn btn-default">Update</button>
-                </div>                    
+                <h1>My Roadtrips</h1>
             </div>
 
             <section id="search_results" class="col-xs-12 col-sm-6 col-md-12">
@@ -104,16 +72,6 @@
                             <p>Looking for {{this.num_companions}}</p>
                         </div>                
                     </div>              
-                    <div class="col-xs-12 col-sm-12 col-md-1 right">
-                        <img class="creator_img" src={{this.creator_img_src}} />
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-2">
-                        <div class="user_data">
-                            <h4 class="user_data">{{this.creator_name}}</h4>
-                            <p class="user_data">{{this.creator_age}}</p>
-                            <p class="user_data">{{this.creator_location}}</p>
-                        </div>
-                    </div>
                     <span class="clearfix borda"></span>         
                 </article>
             </a>
@@ -136,7 +94,7 @@
         <script src="../js/json/road_trips.json"></script>
         <script src="../js/json/users.json"></script>        
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>    
-        <script src="../js/search_results.js"></script>
+        <script src="../js/my-trips.js"></script>
 
     </body>
 </html>
