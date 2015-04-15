@@ -59,13 +59,14 @@
             <section id="search_results" class="col-xs-12 col-sm-6 col-md-12">
 
                 {{#each trips}}
-
-                <article class="search-result row" >
+                <a href="" id={{this.trip_id}}>
+                <article class="search-result row">
                     <div class="col-xs-12 col-sm-12 col-md-3">
-                        <img class="map-img" src={{this.map_img_src}} alt={{this.map_alt_text}} />
+                        <img class="map-img" src={{this.map_img_src}} alt={{this.map_alt_text}}>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 middle">
-                        <h3><a href="#" title="">{{this.trip_name}}</a></h3>
+                        <!-- <h3><a href="" title="">{{this.trip_name}}</a></h3> -->
+                        <h3>{{this.trip_name}}</h3>
                         <div class="full_route col-md-11" id={{full_route_id}}>
                             <p>
                                 <div class="cities_list">
@@ -116,6 +117,7 @@
                     </div>
                     <span class="clearfix borda"></span>         
                 </article>
+            </a>
                 {{/each}}   
 
                 <div id="spinner_container" class="spinner_div">

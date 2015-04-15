@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Roadtrippr: Share an adventure.">
+    <meta name="author" content="Birkan Uzun, Dishaan Ahuja, Tuan Tran">
+
+    <title>Roadtrippr - Trip Details</title>
+
+    <!-- CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/datetimepicker.min.css" rel="stylesheet">
+    <link href="../css/trip-details.css" rel="stylesheet">
+
+    <!-- JavaScript -->
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/moment.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/validator.min.js"></script>
+    <script src="../js/datetimepicker.min.js"></script>
+    <script src="../js/handlebars-v3.0.1.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+    <script src="../js/sortable.min.js"></script>
+    <script src="../js/trip-details.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+      <div class="row">
+        <div class="col-md-4">
+          <div id="trip-details">
+            <p class="lead text-center trip-name">{{name}}</p>
+            <hr>
+            <div class="creator_container">
+              <div class="creator_img">
+                  <img class="creator_img" src={{this.creator_img_src}} />
+              </div>
+              <div class="user_data">
+                  <h4 class="">{{this.creator_first_name}}</h4>
+                  <p class="">{{this.creator_age}}</p>
+                  <p class="">{{this.creator_location}}</p>
+              </div>
+            </div>
+            <hr>
+            <p class="lead text-center trip-dates">From {{start_date}} To {{end_date}} ({{duration}})</p>
+            {{#if are_dates_flexible}}
+              <p class="text-center"><em>{{creator_first_name}} is flexible with the dates.</em></p>
+            {{/if}}
+            <hr>
+            <p class="lead text-center companion-count">Looking for {{companion_count}}</p>
+            <hr>
+            <p class="lead locations"><b>Stops:</b></p>
+            <div id="stops" class="list-group">
+              {{#each stops}}
+                <div class="list-group-item stop-group-item">
+                  <span class="stop" aria-hidden="true">{{this}}</span>
+                </div>
+              {{/each}}
+            </div>
+
+            <hr>
+            <p class="lead notes"><b>Notes:</b> {{notes}}</p>
+            <hr>
+          </div>
+        </div>
+        <div class="col-md-8" id="map-canvas"></div>
+      </div>
+    </div>
+
+  </body>
+
+</html>
