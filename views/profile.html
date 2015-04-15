@@ -19,25 +19,26 @@
   <body>
     <div class="container">
       <center>
-        <img src={{photo}} name="aboutme" width="140" height="140" class="img-circle">
+        <img src="{{photo}}" name="aboutme" width="140" height="140" class="img-circle">
         <h2>{{first_name}} {{last_name}}</h2>
         <h5>{{gender}}</h5>
         <h5>{{age}}</h5>
         <h5>{{city}}</h5>
         <h5>{{occupation}}</h5>
+        <span class="label label-warning">CHAT</span> <span class="label label-success">ADD TO MAYBES</span><br>
       </center>
       <hr>
       <center>
         <div class="text-left">
-          <h3>About Me: </h3>{{about_me}}
+          <h3 class="profile-info">About Me: </h3><span class="profile-info">{{about_me}}</span>
         </div>
         <br>
         <div class="text-left">
-          <h3>6 Things I Couldn't Travel Without: </h3>{{six_things}}
+          <h3 class="profile-info">6 Things I Couldn't Travel Without: </h3><span class="profile-info">{{six_things}}</span>
         </div>
         <br>
         <div class="text-left">
-          <h3>Best Places I've Been To: </h3>{{best_places}}
+          <h3 class="profile-info">Best Places I've Been To: </h3><span class="profile-info">{{best_places}}</span>
         </div>
       </center>
     </div>
