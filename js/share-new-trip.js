@@ -123,7 +123,7 @@ $(document).ready(function() {
 			origin: new google.maps.LatLng(start.k, start.D),
 			destination: new google.maps.LatLng(end.k, end.D),
 		  	waypoints: waypts,
-		  	optimizeWaypoints: true,
+		  	optimizeWaypoints: false,
 		  	travelMode: google.maps.TravelMode.DRIVING
 		};
 		directionsService.route(request, function(response, status) {
