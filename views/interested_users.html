@@ -20,14 +20,12 @@
     <div class="container">
 
       <div class="row">
-        <h1>Roadtrippr</h1>
-      </div>
-      <div class="row">
-        <h2>INTERESTED USERS</h2>
+        <h1>INTERESTED USERS</h1>
       </div>
       <div class='row'>
         <div class='col-md-12'>
-          <div class="carousel slide media-carousel" id="media">
+          <div class="carousel slide media-carousel" id="media"> 
+            <h3 id="trip_name"></h3>
             <div class="carousel-inner">
               <div class="item">
                 <div class="row">
@@ -37,13 +35,13 @@
                       <center>
                         <h3>{{first_name}} {{last_name}}</h3>
                         <br>
-                        <h5>Interested Road Trip(s): </h5><span class="interested_road_trip"></span>
                       </center>
                     </div>   
                   {{/each}}           
                 </div>
               </div>
             </div>
+
             <a data-slide="prev" href="#media" class="left carousel-control">‹</a>
             <a data-slide="next" href="#media" class="right carousel-control">›</a>
           </div>                          
@@ -63,7 +61,7 @@
                         <br>
                         <span class="label label-warning">CHAT</span><br>
                         <span class="label label-success">ADD TO MAYBES</span><br>
-                        <a href="#" class="label label-info">VIEW PROFILE</a>
+                        <a href="profile.html?user={{index}}" class="label label-info">VIEW PROFILE</a>
                       </center>
                     </div>
                     <div class="col-md-6">
