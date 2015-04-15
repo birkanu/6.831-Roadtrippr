@@ -236,7 +236,6 @@ $(document).ready(function() {
 
 	$('#btn-share-trip').click(function() {
 		if ($("#edit-trip-container").is(":visible")) {
-			// $('#edit-trip-form').validator('validate');
 			if (isFormValid) {
 				$(this).text("Share My Trip");
 				$('#btn-edit-trip-details').text("Edit Trip Details");
@@ -257,8 +256,8 @@ $(document).ready(function() {
 			}
 		} else {
 			localStorage.setItem('new_trip_details', JSON.stringify(new_trip_details));
-			console.log(new_trip_details);
-			//document.location.href = "views/trip_details.html";
+			new_trip_details.is_shared = true;
+			document.location.href = "my-trips.html?shared-new-trip=true";
 		}
 	});
 
