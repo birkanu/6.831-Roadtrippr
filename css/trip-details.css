@@ -2,6 +2,7 @@ html,
 body {
   height: 100%;
   width: 100%;
+  overflow: hidden;  
 }
 
 .site-wrapper {
@@ -126,3 +127,13 @@ body {
   left: 40%;
   top: 10%;
 }
+
+.col-md-4 {
+  position: fixed;
+  overflow-y: scroll;
+}
+
+#map-canvas {
+  position: relative;
+  float: right;
+}  
