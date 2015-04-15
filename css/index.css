@@ -38,7 +38,7 @@ body {
   outline: none;
 }
 
-.dropdown-menu{
+#user-menu .dropdown-menu{
   float:right;
   color: #000;
   text-shadow: none;
