@@ -35,6 +35,8 @@ $(document).ready(function() {
   $('#signup-form').validator().on('submit', function (e) {
       if (!e.isDefaultPrevented()) {
         e.preventDefault();
+        var first_name = $('#signup-first-name').val();
+        var last_name = $('#signup-last-name').val();
         var email = $('#signup-email').val();
         var password = $('#signup-password').val();
         // if (!start_location_find_modal || !end_location_find_modal) {
