@@ -12,18 +12,10 @@ function getQueryVariable(variable) {
 $(document).ready(function() {
     var shared_new_trip = getQueryVariable("shared-new-trip");
     var new_trip;
+    
     if (shared_new_trip) {
         new_trip = localStorage.getItem("new_trip_details");
     }
-
-
-    // Get search params to populate inline form
-    var search_parameters = JSON.parse(localStorage.getItem('searched_trip'));
-    $('#search-start-location').val(search_parameters.start_location.formatted_address);
-    $('#search-end-location').val(search_parameters.end_location.formatted_address);
-    $('#search-start-date').val(moment(search_parameters.start_date).format("MMMM DD, YYYY"));
-    $('#search-end-date').val(moment(search_parameters.end_date).format("MMMM DD, YYYY"));
-    $('#flexible-dates-checkbox').prop('checked', search_parameters.are_dates_flexible);
 
     // Populate dummy search results
     var search_result_source = $("#search_results").html();

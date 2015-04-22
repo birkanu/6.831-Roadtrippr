@@ -23,7 +23,7 @@
             <div class="heading">
                 <h1>My Roadtrips</h1>
             </div>
-            <div class="alert alert-success trip-creation" role="alert" style="display:none;">You have successfully added a new trip.</div>
+            <div class="alert alert-success trip-creation" role="alert" style="display:none;">You have successfully created a new trip.</div>
             <section id="search_results" class="col-xs-12 col-sm-6 col-md-12">
 
                 {{#each trips}}
@@ -74,8 +74,8 @@
                                 
                     </div>           
                     <div class="col-xs-12 col-sm-12 col-md-2 right">
-                         <div class="interested_users">
-                          <a href="interested_users.html?trip_index={{index}}">See Interested Users</a>
+                        <div class="interested_users">
+                          <p class='text-center'><a href="interested_users.html?trip_index={{index}}">See Interested Users</a></p>
                         </div> 
                     </div>
                     <span class="clearfix borda"></span>         
@@ -90,6 +90,7 @@
         </div>
 
         <!-- JavaScript -->
+        <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
         <script src="../js/jquery-2.1.3.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/moment.js"></script>
@@ -97,8 +98,8 @@
         <script src="../js/spin.min.js"></script>
         <script src="../js/datetimepicker.min.js"></script>    
         <script src="../js/handlebars-v3.0.1.js"></script>
-        <script src="../js/json/road_trips.json"></script>
-        <script src="../js/json/users.json"></script>        
+        <script src="../js/json/road_trips.js"></script>
+        <script src="../js/json/users.js"></script>        
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>    
         <script src="../js/my-trips.js"></script>
 

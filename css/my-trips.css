@@ -50,7 +50,14 @@ div h1 {
 .search-result .right { 
     border-left: 1px dotted #CCCCCC; 
     min-height: 150px; 
+    display: table;
 }
+
+.interested_users {
+    display: table-cell;
+    vertical-align: middle;
+}
+
 .search-result ul { 
     padding-left: 0 !important; 
     list-style: none;  
@@ -123,4 +130,13 @@ div h1 {
 
 a {
     color: black !important;
+}
+
+.interested_users a { 
+    color: #337ab7 !important; 
+}
+
+.trip-creation {
+    margin-top: 20px;
+    margin-bottom: -20px;
 }
