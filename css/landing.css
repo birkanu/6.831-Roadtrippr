@@ -22,6 +22,31 @@ body {
   display: table-cell;
 }
 
+#user-menu {
+  float: right;
+  margin-top: 20px;
+  vertical-align: top;
+  margin-right: 20px;
+  position:relative;
+}
+
+.open>.dropdown-toggle.btn-default {
+  color: #000;
+  text-shadow: none;
+  background-color: #fff;
+  border: 2px solid #000;
+  outline: none;
+}
+
+#user-menu .dropdown-menu{
+  float:right;
+  color: #000;
+  text-shadow: none;
+  background-color: #fff;
+  border: 2px solid #000;
+  outline: none;
+}
+
 .cover-container {
   margin-right: auto;
   margin-left: auto;
@@ -82,12 +107,12 @@ body {
   outline: none;
 }
 
-#btn-submit-login {
+#btn-submit-start-trip-modal {
   margin-left: 15px;
   font-weight: bold;
 }
 
-#btn-submit-signup {
+#btn-submit-find-trip-modal {
   margin-left: 15px;
   font-weight: bold;
 }
@@ -96,17 +121,6 @@ body {
   padding-left: 0px !important;
   padding-right: 0px !important;
   overflow-y: scroll;
-}
-
-.errorMessageLabel {
-  margin-left: 30px; 
-}
-
-.form-group .email,
-.form-group .password {
-  margin-left: 30px;
-  width: 90%;
-  resize: vertical;
 }
 
 .form-inline .form-group {
@@ -118,4 +132,34 @@ body {
   width: 100%;
 }
 
+.form-inline .input-group {
+  width: 100%;
+}
 
+.companions .control-label {
+  padding-left: 30px;
+  margin-right: -70px;
+  text-align: left;
+}
+
+.notes .form-control {
+  margin-left: 15px;
+  width: 95%;
+  resize: vertical;
+}
+
+.errorMessageLabel {
+  margin-left: 30px; 
+}
+
+.flexible-dates {
+  margin-left: 30px;
+}
+
+.form-horizontal .checkbox {
+  margin-top: 33px;
+}
+
+.pac-container { 
+  z-index: 10000;
+}
