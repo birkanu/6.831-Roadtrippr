@@ -15,44 +15,34 @@ $(document).ready(function() {
 	$(window).on('resize', centerModals);
 
 
-	$('#start-trip-form').validator({});
-  $('#find-trip-form').validator({});
+	$('#login-form').validator({});
+  $('#signup-form').validator({});
 
-	$('#start-trip-form').validator().on('submit', function (e) {
+	$('#login-form').validator().on('submit', function (e) {
 		if (!e.isDefaultPrevented()) {
 			e.preventDefault();
-			var new_trip = {}
-			new_trip.start_location = start_location;
-			new_trip.end_location = end_location;
-			new_trip.start_date = start_date;
-			new_trip.end_date = end_date;
-			new_trip.are_dates_flexible = $('#flexible-dates-checkbox').is(":checked") ? true : false;
-			new_trip.companion_count = $("#start-trip-modal-companion-count option:selected").text();
-			new_trip.notes = $('#start-trip-modal-notes').val();
-			if (!start_location || !end_location) {
-				$(".errorMessage").show();
-			} else {
-				localStorage.setItem('new_trip', JSON.stringify(new_trip));
-				document.location.href = "views/share-new-trip.html";
-			}
-  		} 
+      var email = $('#login-email').val();
+      var password = $('#login-password').val();  
+			// if (!start_location || !end_location) {
+			// 	$(".errorMessage").show();
+			// } else {
+			// 	localStorage.setItem('new_trip', JSON.stringify(new_trip));
+			// 	document.location.href = "views/share-new-trip.html";
+			// }
+  	} 
 	});
   
-  $('#find-trip-form').validator().on('submit', function (e) {
+  $('#signup-form').validator().on('submit', function (e) {
       if (!e.isDefaultPrevented()) {
-          e.preventDefault();
-          var searched_trip = {}
-          searched_trip.start_location = start_location_find_modal;
-          searched_trip.end_location = end_location_find_modal;
-          searched_trip.start_date = start_date_find_modal;
-          searched_trip.end_date = end_date_find_modal;
-          searched_trip.are_dates_flexible = $('#flexible-dates-checkbox-find-modal').is(":checked") ? true : false;
-          if (!start_location_find_modal || !end_location_find_modal) {
-              $(".errorMessage").show();
-          } else {
-              localStorage.setItem('searched_trip', JSON.stringify(searched_trip));
-              document.location.href = "views/search-results.html";
-          }
+        e.preventDefault();
+        var email = $('#signup-email').val();
+        var password = $('#signup-password').val();
+        // if (!start_location_find_modal || !end_location_find_modal) {
+        //     $(".errorMessage").show();
+        // } else {
+        //     localStorage.setItem('searched_trip', JSON.stringify(searched_trip));
+        //     document.location.href = "views/search-results.html";
+        // }
       } 
   });
     
