@@ -27,7 +27,7 @@ users = [
     "six_things": "laptop, book, eye mask, ear plugs, Q-tips, phone",
     "best_places": "Cambodia, Malaysia",
     "note": "Since this will be my first time doing a road trip, I'm very flexible!",
-    "interested_trips": "0,2",
+    "interested_trips": "0,1,2",
     "index": 1
   },
 
@@ -75,7 +75,7 @@ users = [
     "six_things": "comic books, Nintendo DS, phone, Rubik's cube, laptop, protein shaker cup",
     "best_places": "Dominican Republic, Haiti",
     "note": "I'm a really outgoing guy and my friends say I'm fun to be around with! Let me know if you're interested in joining me!",
-    "interested_trips": "0,3,4",
+    "interested_trips": "0,1,3,4",
     "index": 4
   },       
 ]
