@@ -78,8 +78,8 @@ $(document).ready(function() {
 						about_me: '',
 						six_things: '',
 						best_places: '',
-						trips: [],
-						interested_trips: []
+						trips: '',
+						interested_trips: ''
 					});
 					$(".signupSuccessMessage").show();
 					$('#login-modal').modal('show');

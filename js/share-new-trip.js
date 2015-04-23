@@ -1,5 +1,16 @@
 $(document).ready(function() {
 
+	var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
+	var current_user_uid;
+	var current_user;
+	var authData = ref.getAuth();
+	if (authData) {
+		current_user_uid = authData.uid;
+		ref.child("users").child(current_user_uid).once('value', function(dataSnapshot) {
+			current_user = dataSnapshot.val();
+		});
+	}
+
 	// Set Moment.js locale to English, because it's apparently in Chinese by default for some reason. 
 	moment.locale('en');
 
@@ -219,6 +230,7 @@ $(document).ready(function() {
 			$(this).text("Edit Trip Details");	
 			$('#btn-share-trip').text("Share My Trip");
 			setTripDetails();
+			$('#edit-trip-form').validator('validate');
 		}
 		$("#trip-details, #edit-trip-container").toggle();
 	});
@@ -255,9 +267,24 @@ $(document).ready(function() {
 				$("#trip-details, #edit-trip-container").toggle();			
 			}
 		} else {
-			localStorage.setItem('new_trip_details', JSON.stringify(new_trip_details));
-			new_trip_details.is_shared = true;
-			document.location.href = "my-trips.html?shared-new-trip=true";
+			if (current_user) {
+				$('.share-trip-error-message').hide();
+				var tripsRef = ref.child("trips");
+				var newTripRef = tripsRef.push(new_trip_details);
+				var new_trip_uid = newTripRef.key();
+				var current_user_trips = current_user.trips;
+				if (current_user_trips == '') {
+					current_user_trips = new_trip_uid;
+				} else {
+					current_user_trips = current_user_trips + ', ' + new_trip_uid;
+				}
+				ref.child("users").child(current_user_uid).update({
+				  	"trips": current_user_trips
+				});
+				document.location.href = "my-trips.html?shared-new-trip=true";
+			} else {
+				$('.share-trip-error-message').show();
+			}
 		}
 	});
 
