@@ -51,6 +51,11 @@ body {
   font-size: !important 20px;
 }
 
+.share-trip-error-message {
+  font-size: 17px;
+  color: red;
+}
+
 #stops .stop {
   margin-left: 10px;
 }
