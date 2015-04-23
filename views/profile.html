@@ -18,92 +18,95 @@
 
   <body>
     <div class="container">
-      <div id="profile-details">
-        <center>
-          <img src="{{photo}}" name="aboutme" width="140" height="140" class="img-circle">
-          <h2><span id="first-name">{{first_name}}<span> <span id="last-name">{{last_name}}</span></h2>
-          <h5 id="gender">{{gender}}</h5>
-          <h5 id="age">{{age}}</h5>
-          <h5 id="city">{{city}}</h5>
-          <h5 id="occupation">{{occupation}}</h5>
-          <span class="label label-warning">CHAT</span> <span class="label label-success">ADD TO MAYBES</span><br>
-        </center>
-        <br>
-        <center>
-          <div class="text-left">
-            <h3 class="profile-info">About Me: </h3><span class="profile-info" id="about-me">{{about_me}}</span>
-          </div>
+      <div id="edit-profile-reminder"></div>
+      <div id="profile">
+        <div id="profile-details">
+          <center>
+            <img src="{{photo}}" name="aboutme" width="140" height="140" class="img-circle">
+            <h2><span id="first-name">{{first_name}}<span> <span id="last-name">{{last_name}}</span></h2>
+            <h5 id="gender">{{gender}}</h5>
+            <h5 id="age">{{age}}</h5>
+            <h5 id="city">{{city}}</h5>
+            <h5 id="occupation">{{occupation}}</h5>
+            <span class="label label-warning">CHAT</span> <span class="label label-success">ADD TO MAYBES</span><br>
+          </center>
           <br>
-          <div class="text-left">
-            <h3 class="profile-info">6 Things I Couldn't Travel Without: </h3><span class="profile-info" id="six-things">{{six_things}}</span>
-          </div>
-          <br>
-          <div class="text-left">
-            <h3 class="profile-info">Best Places I've Been To: </h3><span class="profile-info" id="best-places">{{best_places}}</span>
-          </div>
-        </center>
-      </div>
+          <center>
+            <div class="text-left">
+              <h3 class="profile-info">About Me: </h3><span class="profile-info" id="about-me">{{about_me}}</span>
+            </div>
+            <br>
+            <div class="text-left">
+              <h3 class="profile-info">6 Things I Couldn't Travel Without: </h3><span class="profile-info" id="six-things">{{six_things}}</span>
+            </div>
+            <br>
+            <div class="text-left">
+              <h3 class="profile-info">Best Places I've Been To: </h3><span class="profile-info" id="best-places">{{best_places}}</span>
+            </div>
+          </center>
+        </div>
 
-      <div id="edit-profile-container" style="display:none;">
-        <center>
-          <img src="{{photo}}" name="aboutme" width="140" height="140" class="img-circle">
-        </center>
-        <br>
-        <center>
-          <form class="form-horizontal" id="edit-profile-form">
-            <div class="form-group user-first-name">
-              <div class="col-md-12">
-                <div class="form-inline">  
-                  <input type="text" id="edit-profile-form-user-first-name" class="form-control" placeholder="First Name" value="{{first_name}}" required/>
+        <div id="edit-profile-container" style="display:none;">
+          <center>
+            <img src="{{photo}}" name="aboutme" width="140" height="140" class="img-circle">
+          </center>
+          <br>
+          <center>
+            <form class="form-horizontal" id="edit-profile-form">
+              <div class="form-group user-first-name">
+                <div class="col-md-12">
+                  <div class="form-inline">  
+                    <input type="text" id="edit-profile-form-user-first-name" class="form-control" placeholder="First Name" value="{{first_name}}" required/>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group user-last-name">
-              <div class="col-md-12">
-                <div class="form-inline">  
-                  <input type="text" id="edit-profile-form-user-last-name" class="form-control" placeholder="Last Name" value="{{last_name}}" required/>
+              <div class="form-group user-last-name">
+                <div class="col-md-12">
+                  <div class="form-inline">  
+                    <input type="text" id="edit-profile-form-user-last-name" class="form-control" placeholder="Last Name" value="{{last_name}}" required/>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group user-gender">
-              <div class="col-md-12">
-                <div class="form-inline">  
-                  <input type="text" id="edit-profile-form-user-gender" class="form-control" placeholder="Gender" value="{{gender}}" required/>
+              <div class="form-group user-gender">
+                <div class="col-md-12">
+                  <div class="form-inline">  
+                    <input type="text" id="edit-profile-form-user-gender" class="form-control" placeholder="Gender" value="{{gender}}" required/>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group user-age">
-              <div class="col-md-12">
-                <div class="form-inline">  
-                  <input type="number" id="edit-profile-form-user-age" class="form-control" placeholder="Age" value="{{age}}" min="1" required/>
+              <div class="form-group user-age">
+                <div class="col-md-12">
+                  <div class="form-inline">  
+                    <input type="number" id="edit-profile-form-user-age" class="form-control" placeholder="Age" value="{{age}}" min="1" required/>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group user-city">
-              <div class="col-md-12">
-                <div class="form-inline">  
-                  <input type="text" id="edit-profile-form-user-city" class="form-control" placeholder="City" value="{{city}}" required/>
+              <div class="form-group user-city">
+                <div class="col-md-12">
+                  <div class="form-inline">  
+                    <input type="text" id="edit-profile-form-user-city" class="form-control" placeholder="City" value="{{city}}" required/>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group user-occupation">
-              <div class="col-md-12">
-                <div class="form-inline">  
-                  <input type="text" id="edit-profile-form-user-occupation" class="form-control" placeholder="Occupation" value="{{occupation}}" required/>
+              <div class="form-group user-occupation">
+                <div class="col-md-12">
+                  <div class="form-inline">  
+                    <input type="text" id="edit-profile-form-user-occupation" class="form-control" placeholder="Occupation" value="{{occupation}}" required/>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group form-group-lg user-about-me">
-              <input type="text" id="edit-profile-form-user-about-me" class="form-control" placeholder="About Me" value="{{about_me}}" required/>
-            </div>
-            <div class="form-group form-group-lg user-six-things">
-              <input type="text" id="edit-profile-form-user-six-things" class="form-control" placeholder="6 Things I Couldn't Travel Without" value="{{six_things}}" required/>
-            </div>
-            <div class="form-group form-group-lg user-best-places">
-              <input type="text" id="edit-profile-form-user-best-places" class="form-control" placeholder="Best Places I've Been To" value="{{best_places}}" required/>
-            </div>
-          </form>
-        </center>        
+              <div class="form-group form-group-lg user-about-me">
+                <input type="text" id="edit-profile-form-user-about-me" class="form-control" placeholder="About Me" value="{{about_me}}" required/>
+              </div>
+              <div class="form-group form-group-lg user-six-things">
+                <input type="text" id="edit-profile-form-user-six-things" class="form-control" placeholder="6 Things I Couldn't Travel Without" value="{{six_things}}" required/>
+              </div>
+              <div class="form-group form-group-lg user-best-places">
+                <input type="text" id="edit-profile-form-user-best-places" class="form-control" placeholder="Best Places I've Been To" value="{{best_places}}" required/>
+              </div>
+            </form>
+          </center>        
+        </div>
       </div>
 
       <br>
