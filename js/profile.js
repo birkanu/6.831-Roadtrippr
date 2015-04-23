@@ -10,70 +10,125 @@ function getQueryVariable(variable) {
 }
 
 $(document).ready(function() {
-  
-  var user_source = $(".container").html();
+  var photo;
+
+  var user_source = $("#profile").html();
   var user_template = Handlebars.compile(user_source);
 
-  var user = getQueryVariable("user");
-  if (user) {
-    var current_user = users[parseInt(user)];
-  } else {
-    var current_user = users[parseInt(localStorage.getItem('current_user_index'))];
-  }
-  $(".container").html(user_template(current_user));
+  // Get the current user from Firebase.
+  var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
 
-
-
-  $('#edit-profile-form').validator({});
+  var current_user;
+  var authData = ref.getAuth();
   var isFormValid;
-  $('#edit-profile-form').validator().on('invalid.bs.validator', function (e) {
-    isFormValid = false;
-    console.log("form invalid");
-  })
-  $('#edit-profile-form').validator().on('valid.bs.validator', function (e) {
-    isFormValid = true;
-    console.log("form valid");
-  })
+  if (authData) {
+    ref.child("users").child(authData.uid).once('value', function(dataSnapshot) {
+      current_user = dataSnapshot.val();  // Object containing user data.
+      $("#profile").html(user_template(current_user));  // Handlebars.
+      photo = current_user.photo; // Save URL of photo to use in edit form.
 
-  $('#btn-edit-profile-details').click(function() {
+      // If this is a new user, prompt him/her to edit profile.
+      var edit_profile = getQueryVariable("edit-profile");
+      if (edit_profile) {
+        $("#edit-profile-reminder").html("Please add details to your profile before continuing to use Roadtrippr");
+        $("#profile-details, #edit-profile-container").toggle();  // Show the edit profile form.
+        $('#btn-edit-profile-details').hide();
+        $('#btn-edit-profile-save').show(); // Do not allow the user to move on until successfully saving profile details.
+        $('#edit-profile-form').validator('validate');  // Make the empty boxes red to show an error.
+      }
+      // Initialize validation for later changes.
+      $('#edit-profile-form').validator({});
+      $('#edit-profile-form').validator().on('invalid.bs.validator', function (e) {
+        isFormValid = false;
+        console.log("form invalid");
+      })
+      $('#edit-profile-form').validator().on('valid.bs.validator', function (e) {
+        isFormValid = true;
+        console.log("form valid");
+      })
+    });
+  } else {
+    document.location.href = "index.html";
+  }
+
+  // Clicking on Edit Profile or Cancel.
+  $(document.body).on('click', '#btn-edit-profile-details', function() {
     if (!$("#edit-profile-container").is(":visible")) {
       $(this).text("Cancel");
       $('#btn-edit-profile-save').show();
     } else {
       $(this).text("Edit Profile");  
       $('#btn-edit-profile-save').hide();
-      setProfileDetails();
+      setOriginalProfileDetails();  // When clicking Cancel, revert the profile details back to the original.
+      $('#edit-profile-form').validator('validate');  // Make the empty boxes red to show an error.
     }
     $("#profile-details, #edit-profile-container").toggle();
   });
 
-  $("#btn-edit-profile-save").click(function() {
+  // Clicking on Save.
+  $(document.body).on('click', '#btn-edit-profile-save', function() {
     if (isFormValid) {
-      var first_name = $("#edit-profile-form-user-first-name").val();
-      var last_name = $("#edit-profile-form-user-last-name").val();
-      var gender = $("#edit-profile-form-user-gender").val();
-      var age = $("#edit-profile-form-user-age").val();
-      var city = $("#edit-profile-form-user-city").val();
-      var occupation = $("#edit-profile-form-user-occupation").val();
-      var about_me = $("#edit-profile-form-user-about-me").val();
-      var six_things = $("#edit-profile-form-user-six-things").val();
-      var best_places = $("#edit-profile-form-user-best_places").val();
-      $("#btn-edit-profile-details").text("Edit Profile");  
-      $(this).hide();
-      $("#profile-details, #edit-profile-container").toggle();
+      $("#edit-profile-reminder").html(""); // Remove the note to update profile upon first login.
+
+      // Save data to Firebase.
+      ref.child("users").child(authData.uid).update({
+        first_name: $("#edit-profile-form-user-first-name").val(),
+        last_name: $("#edit-profile-form-user-last-name").val(),
+        gender: $("#edit-profile-form-user-gender").val(),
+        age: $("#edit-profile-form-user-age").val(),
+        city: $("#edit-profile-form-user-city").val(),
+        occupation: $("#edit-profile-form-user-occupation").val(),
+        about_me: $("#edit-profile-form-user-about-me").val(),
+        six_things: $("#edit-profile-form-user-six-things").val(),
+        best_places: $("#edit-profile-form-user-best-places").val()
+        // photo for future?
+      });
+      
+      document.location.href = "profile.html";  // Go to this page to avoid keeping the ?edit-profile=true 
+
+      // The code below is needed only if we remove the line above - document.location.href = "profile.html"
+
+      // Put this code before reloading the handlebars so that it can detect the elements.
+      // $("#btn-edit-profile-details").text("Edit Profile");  
+      // $(this).hide();
+      // $("#profile-details, #edit-profile-container").toggle();
+
+      // // Reload handlebars.
+      // $("#profile").html(user_template({
+      //   "first_name": $("#edit-profile-form-user-first-name").val(),
+      //   "last_name": $("#edit-profile-form-user-last-name").val(),
+      //   "gender": $("#edit-profile-form-user-gender").val(),
+      //   "age": $("#edit-profile-form-user-age").val(),
+      //   "city": $("#edit-profile-form-user-city").val(),
+      //   "occupation": $("#edit-profile-form-user-occupation").val(),
+      //   "about_me": $("#edit-profile-form-user-about-me").val(),
+      //   "six_things": $("#edit-profile-form-user-six-things").val(),
+      //   "best_places": $("#edit-profile-form-user-best-places").val(),
+      //   "photo": photo
+      // }));
+
+      // Reset validation.
+      // $('#edit-profile-form').validator({});
+      // $('#edit-profile-form').validator().on('invalid.bs.validator', function (e) {
+      //   isFormValid = false;
+      //   console.log("form invalid");
+      // })
+      // $('#edit-profile-form').validator().on('valid.bs.validator', function (e) {
+      //   isFormValid = true;
+      //   console.log("form valid");
+      // })
     }
   })
 
-  function setProfileDetails() {
-    $("#edit-profile-form-user-first-name").val($("#first-name").contents()[0].data);
-    $("#edit-profile-form-user-last-name").val($("#last-name").text());    
-    $("#edit-profile-form-user-gender").val($("#gender").text());
-    $("#edit-profile-form-user-age").val($("#age").text());
-    $("#edit-profile-form-user-city").val($("#city").text());
-    $("#edit-profile-form-user-occupation").val($("#occupation").text());
-    $("#edit-profile-form-user-about-me").val($("#about-me").text());
-    $("#edit-profile-form-user-six-things").val($("#six-things").text());
-    $("#edit-profile-form-user-best-places").val($("#best-places").text());
+  function setOriginalProfileDetails() {
+    $("#edit-profile-form-user-first-name").val(current_user.first_name);
+    $("#edit-profile-form-user-last-name").val(current_user.last_name);    
+    $("#edit-profile-form-user-gender").val(current_user.gender);
+    $("#edit-profile-form-user-age").val(current_user.age);
+    $("#edit-profile-form-user-city").val(current_user.city);
+    $("#edit-profile-form-user-occupation").val(current_user.occupation);
+    $("#edit-profile-form-user-about-me").val(current_user.about_me);
+    $("#edit-profile-form-user-six-things").val(current_user.six_things);
+    $("#edit-profile-form-user-best-places").val(current_user.best_places);
   }
-
 });
