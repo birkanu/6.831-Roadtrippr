@@ -19,6 +19,8 @@ $(document).ready(function() {
 	$('#login-form').validator({});
   	$('#signup-form').validator({});
 
+  	var newUser = false;
+
 	$('#login-form').validator().on('submit', function (e) {
 		if (!e.isDefaultPrevented()) {
 			e.preventDefault();
@@ -30,10 +32,15 @@ $(document).ready(function() {
 				password : password
 			}, function(error, authData) {
 				if (error) {
+					$(".signupSuccessMessage").hide();
 					$(".loginErrorMessage").show();
 				} else {
 					$(".loginErrorMessage").hide();
-					document.location.href = "landing.html";
+					if (newUser) {
+						document.location.href = "views/profile.html?edit-profile=true";
+					} else {
+						document.location.href = "landing.html";
+					}
 				}
 			});
 		} 
@@ -46,19 +53,34 @@ $(document).ready(function() {
 			var last_name = $('#signup-last-name').val();
 			var email = $('#signup-email').val();
 			var password = $('#signup-password').val();
-
+			// Create new user in Firebase
 			ref.createUser({
-				first_name: first_name,
-				last_name: last_name,	
 				email: email,
 				password: password
 			}, function(error, userData) {
 				if (error) {
-					console.log(error);
 					$(".signupErrorMessage").show();
 				} else {
 					$(".signupErrorMessage").hide();
 					$('#signup-modal').modal('hide');
+					newUser = true;
+					// Save user to Firebase
+					ref.child("users").child(userData.uid).set({
+						first_name: first_name,
+						last_name: last_name,	
+						email: email,
+						password: password,
+						gender: '',
+						age: '',
+						city: '',
+						occupation: '',
+						photo: 'http://im4249.noticiadahora.net/img/users/default.png',
+						about_me: '',
+						six_things: '',
+						best_places: '',
+						trips: [],
+						interested_trips: []
+					});
 					$(".signupSuccessMessage").show();
 					$('#login-modal').modal('show');
 				}
