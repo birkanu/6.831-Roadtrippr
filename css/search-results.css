@@ -104,10 +104,18 @@ div h1 {
 
 .checkbox {
     margin-top: -5px;
+    position: relative;
+    left: 50%;
 }
 
 .btn-update {
-    text-align: right;
+    position: relative;
+    float: right;
+}
+
+#btn-update-search {
+    position: relative;
+    float: right;
 }
 
 .spinner_div {
