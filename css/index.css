@@ -102,6 +102,10 @@ body {
   margin-left: 30px; 
 }
 
+.successMessageLabel {
+  margin-left: 30px; 
+}
+
 .form-group .email,
 .form-group .password {
   margin-left: 30px;
