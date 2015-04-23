@@ -36,6 +36,9 @@ $(document).ready(function() {
 	$('.modal').on('show.bs.modal', centerModals);
 	$(window).on('resize', centerModals);
 
+  $('#start-trip-modal-start-location').val("");
+  $('#start-trip-modal-end-location').val("");
+
 	// Create the autocomplete object for start location, restricting the search to geographical location types.
 	var autocomplete_start_location = new google.maps.places.Autocomplete(
 		(document.getElementById('start-trip-modal-start-location')),
