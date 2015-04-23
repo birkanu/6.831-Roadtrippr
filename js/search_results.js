@@ -1,3 +1,110 @@
+var performSearch = function(ref, search_parameters, spinner) {
+    var search_results = [];
+    var trips_ref = ref.child("trips");
+    moment.locale('en'); 
+    var start_date_search_by, end_date_search_by;
+    if (search_parameters.are_dates_flexible) {
+        start_date_search_by = moment(search_parameters.start_date).subtract('2', 'weeks').format("X");
+        end_date_search_by = moment(search_parameters.end_date).add('2', 'weeks').format("X");
+    } else {
+        start_date_search_by = moment(search_parameters.start_date).format("X");
+        end_date_search_by = moment(search_parameters.end_date).format("X");        
+    }
+    // console.log(start_date_search_by);
+    // console.log(end_date_search_by);
+
+    var search_result_source = $("#search_results").html();
+    var search_result_template = Handlebars.compile(search_result_source);
+    var search_result_context = {
+        trips: []
+    }    
+    trips_ref.orderByChild("start_ts").startAt(start_date_search_by).on("value", function(start_date_snapshot) {
+        start_date_snapshot.forEach(function(data) {
+            var cur_matched_trip = data.val();
+            if ((cur_matched_trip.end_ts < end_date_search_by) &&
+                (cur_matched_trip.stops[0].place_id == search_parameters.start_location.place_id)) {
+                if (search_parameters.end_location) {
+                    if (cur_matched_trip.stops[cur_matched_trip.stops.length-1].place_id == search_parameters.end_location.place_id) {
+                        search_results.push(cur_matched_trip);
+                    }
+                }
+            }
+        });
+
+        var trip_dict = {};
+
+        for (var i = 0; i < search_results.length; i++) {
+            cur_trip_json = search_results[i];
+            cur_trip_stop_names = [];
+            cur_user = users[i];
+            for (var s = 0; s < cur_trip_json.stops.length; s++) {
+                cur_trip_stop_names.push(cur_trip_json.stops[s].name);
+            }
+            trip = {
+                trip_id: "trip_" +i,
+                full_route_id: "full_route_"+i,
+                abbr_route_id: "abbr_route_"+i,
+                trip_name: cur_trip_json.name,
+                planned_abbr_route: [cur_trip_json.stops[0].name].concat([cur_trip_json.stops[1].name]).concat("...").concat([cur_trip_json.stops[cur_trip_json.stops.length - 1].name]),
+                planned_full_route: cur_trip_stop_names,
+                start_date: cur_trip_json.start_date,
+                end_date: cur_trip_json.end_date,
+                duration: cur_trip_json.duration,
+                num_companions: cur_trip_json.companion_count,
+                are_dates_flexible: cur_trip_json.are_dates_flexible,
+                map_img_src: "http://dishaan.scripts.mit.edu/map-" + i + ".png",
+                creator_img_src: "http://dishaan.scripts.mit.edu/creator-" + i + ".png",
+                creator_id: cur_user.index,
+                creator_name: cur_user.first_name,
+                creator_age: cur_user.age,
+                creator_location:  cur_user.city,
+                notes: cur_trip_json.notes,
+                map_alt_text: "Route map from " + cur_trip_json.start_location + " to " + cur_trip_json.end_location,
+            }
+            search_result_context.trips.push(trip);
+            trip_dict["trip_"+i] = trip;
+        }
+
+        var search_result_source_processed = search_result_template(search_result_context);
+        $("#search_results").html(search_result_source_processed);        
+
+        for (var t = 0; t < road_trips.length; t++) {
+            $("#trip_"+t).click(function(e) {
+                var clicked_trip = trip_dict[this.id];
+                localStorage.setItem('trip', JSON.stringify(clicked_trip));
+                this.href = "trip-details.html";
+                document.location.href = "trip-details.html";            
+            });
+        }
+
+        // Add hover on abbreviated planned route for each route
+        for (var j = 0; j < search_result_context.trips.length; j++) {
+            var full_route_div = $("#full_route_"+j);
+            var abbr_route_div = $("#abbr_route_"+j);
+            full_route_div.offset({left: full_route_div.offset().left, top: abbr_route_div.offset().top});
+            full_route_div.toggle();
+            abbr_route_div.mouseenter(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var full_route_div_id = this.id.replace("abbr", "full");
+                $("#"+full_route_div_id).fadeIn(500);
+            });
+            full_route_div.mouseleave(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var full_route_div_id = this.id.replace("abbr", "full");
+                $("#"+full_route_div_id).fadeOut(500);            
+            });        
+        }        
+    });        
+
+    $('.search-result').fadeIn(500);
+    if (spinner) {
+        spinner.stop();
+        $(".spinner_div").css("padding-top", "0%");                   
+    }
+}
+
 $(document).ready(function() {
 
     var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
@@ -77,6 +184,8 @@ $(document).ready(function() {
         }
     });  
 
+    performSearch(ref, search_parameters);
+
     $('#search-inline-form').validator().on('submit', function (e) {
         e.preventDefault();
         var new_searched_trip = {}
@@ -101,12 +210,12 @@ $(document).ready(function() {
             $('#spinner_container').append(spinner.el);
             $('.search-result').fadeOut();//.delay(1000).fadeIn();
 
-            // performSearch(new_searched_trip);
+            performSearch(ref, new_searched_trip, spinner);
 
-            setTimeout(function() {
-               spinner.stop();
-               $(".spinner_div").css("padding-top", "0%");           
-            }, 1000);     
+            // setTimeout(function() {
+            //    spinner.stop();
+            //    $(".spinner_div").css("padding-top", "0%");           
+            // }, 1000);     
 
             //document.location.href = "search-results.html";
         }        
@@ -143,90 +252,5 @@ $(document).ready(function() {
     // });
 
     // Populate dummy search results
-    var trips_ref = ref.child("trips");
-    moment.locale('en'); 
-    // console.log(moment(start_date).subtract('2', 'weeks').format("MMMM DD, YYYY"));
-    var start_date_search_by, end_date_search_by;
-    if (search_parameters.are_dates_flexible) {
-        start_date_search_by = moment(start_date).subtract('2', 'weeks').format("X");
-        end_date_search_by = moment(end_date).add('2', 'weeks').format("X");
-    } else {
-        start_date_search_by = moment(start_date).format("X");
-        end_date_search_by = moment(end_date).format("X");        
-    }
-    console.log(start_date_search_by);
-    console.log(end_date_search_by);
-    trips_ref.orderByChild("start_location").equalTo(start_location).on("value", function(start_date_snapshot) {
-        start_date_snapshot.forEach(function(data) {
-            console.log(date.val());
-        });
-    });
-    var search_result_source = $("#search_results").html();
-    var search_result_template = Handlebars.compile(search_result_source);
-    var search_result_context = {
-        trips: []
-    }
-
-    var trip_dict = {};
-
-    for (var i = 0; i < road_trips.length; i++) {
-        cur_trip_json = road_trips[i];
-        cur_user = users[i];
-        trip = {
-            trip_id: "trip_" +i,
-            full_route_id: "full_route_"+i,
-            abbr_route_id: "abbr_route_"+i,
-            trip_name: cur_trip_json.trip_name,
-            planned_abbr_route: [cur_trip_json.start_location].concat(cur_trip_json.stops[0]).concat("...").concat([cur_trip_json.end_location]),
-            planned_full_route: [cur_trip_json.start_location].concat(cur_trip_json.stops).concat([cur_trip_json.end_location]),
-            start_date: cur_trip_json.start_date,
-            end_date: cur_trip_json.end_date,
-            duration: cur_trip_json.duration,
-            num_companions: cur_trip_json.num_companions,
-            are_dates_flexible: cur_trip_json.are_dates_flexible,
-            map_img_src: "http://dishaan.scripts.mit.edu/map-" + i + ".png",
-            creator_img_src: "http://dishaan.scripts.mit.edu/creator-" + i + ".png",
-            creator_id: cur_user.index,
-            creator_name: cur_user.first_name,
-            creator_age: cur_user.age,
-            creator_location:  cur_user.city,
-            notes: cur_trip_json.notes,
-            map_alt_text: "Route map from " + cur_trip_json.start_location + " to " + cur_trip_json.end_location,
-        }
-        search_result_context.trips.push(trip);
-        trip_dict["trip_"+i] = trip;
-    }
-
-    var search_result_source_processed = search_result_template(search_result_context);
-    $("#search_results").html(search_result_source_processed);
-
-    for (var t = 0; t < road_trips.length; t++) {
-        $("#trip_"+t).click(function(e) {
-            var clicked_trip = trip_dict[this.id];
-            localStorage.setItem('trip', JSON.stringify(clicked_trip));
-            this.href = "trip-details.html";
-            document.location.href = "trip-details.html";            
-        });
-    }
-
-    // Add hover on abbreviated planned route for each route
-    for (var j = 0; j < search_result_context.trips.length; j++) {
-        var full_route_div = $("#full_route_"+j);
-        var abbr_route_div = $("#abbr_route_"+j);
-        full_route_div.offset({left: full_route_div.offset().left, top: abbr_route_div.offset().top});
-        full_route_div.toggle();
-        abbr_route_div.mouseenter(function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var full_route_div_id = this.id.replace("abbr", "full");
-            $("#"+full_route_div_id).fadeIn(500);
-        });
-        full_route_div.mouseleave(function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var full_route_div_id = this.id.replace("abbr", "full");
-            $("#"+full_route_div_id).fadeOut(500);            
-        });        
-    }
 
 });

@@ -20,12 +20,18 @@ $(document).ready(function() {
 	new_trip_details.name = new_trip.start_location.formatted_address.substring(0, new_trip.start_location.formatted_address.indexOf(',')) + 
 	'-' + new_trip.end_location.formatted_address.substring(0, new_trip.end_location.formatted_address.indexOf(',')) + ' Trip';
 	new_trip_details.start_date = moment(new_trip.start_date).format("MMMM DD, YYYY");
-	new_trip_details.start_ts = moment(new_trip.start_date).format("X");
 	new_trip_details.end_date = moment(new_trip.end_date).format("MMMM DD, YYYY");
-	new_trip_details.end_ts = moment(new_trip.end_date).format("X");
 	var trip_duration = moment(new_trip.end_date).diff(moment(new_trip.start_date), 'days') + 1;
 	new_trip_details.duration = trip_duration > 1 ? trip_duration + " Days" : trip_duration + " Day";
 	new_trip_details.are_dates_flexible = new_trip.are_dates_flexible;
+	if (new_trip.are_dates_flexible) {
+		new_trip_details.start_ts = moment(new_trip.start_date).subtract('2', 'weeks').format("X");		
+		new_trip_details.end_ts = moment(new_trip.end_date).add('2', 'weeks').format("X");		
+	} else {
+		new_trip_details.start_ts = moment(new_trip.start_date).format("X");
+		new_trip_details.end_ts = moment(new_trip.end_date).format("X");
+	}
+
 	new_trip_details.companion_count = new_trip.companion_count;
 	new_trip_details.stops = []; 
 	new_trip_details.stops.push(new_trip.start_location, new_trip.end_location);
