@@ -79,12 +79,12 @@ $(document).ready(function() {
 
     $('#search-inline-form').validator().on('submit', function (e) {
         e.preventDefault();
-        var searched_trip = {}
-        searched_trip.start_location = start_location;//autocomplete_start_location.getPlace();
-        searched_trip.end_location = end_location;//autocomplete_end_location.getPlace();
-        searched_trip.start_date = start_date;
-        searched_trip.end_date = end_date;
-        searched_trip.are_dates_flexible = $('#flexible-dates-checkbox').is(":checked") ? true : false;
+        var new_searched_trip = {}
+        new_searched_trip.start_location = start_location;//autocomplete_start_location.getPlace();
+        new_searched_trip.end_location = end_location;//autocomplete_end_location.getPlace();
+        new_searched_trip.start_date = start_date;
+        new_searched_trip.end_date = end_date;
+        new_searched_trip.are_dates_flexible = $('#flexible-dates-checkbox').is(":checked") ? true : false;
         if (!start_location || !end_location) {
             if (!start_location) {
                 $("#search-start-location").css("border", "solid red 1px");
@@ -94,14 +94,14 @@ $(document).ready(function() {
             }
             return;
         } else {
-            localStorage.setItem('searched_trip', JSON.stringify(searched_trip));
+            localStorage.setItem('searched_trip', JSON.stringify(new_searched_trip));
 
             $(".spinner_div").css("padding-top", "25%");
             var spinner = new Spinner(opts).spin();        
             $('#spinner_container').append(spinner.el);
-            $('.search-result').fadeOut().delay(1000).fadeIn();
+            $('.search-result').fadeOut();//.delay(1000).fadeIn();
 
-            
+            // performSearch(new_searched_trip);
 
             setTimeout(function() {
                spinner.stop();
@@ -144,8 +144,22 @@ $(document).ready(function() {
 
     // Populate dummy search results
     var trips_ref = ref.child("trips");
-    trips_ref.child("start_date").equalTo(moment(start_date).format("MMMM DD, YYYY")).on("child_added", function(start_date_snapshot) {
-        console.log(start_date_snapshot.val());
+    moment.locale('en'); 
+    // console.log(moment(start_date).subtract('2', 'weeks').format("MMMM DD, YYYY"));
+    var start_date_search_by, end_date_search_by;
+    if (search_parameters.are_dates_flexible) {
+        start_date_search_by = moment(start_date).subtract('2', 'weeks').format("X");
+        end_date_search_by = moment(end_date).add('2', 'weeks').format("X");
+    } else {
+        start_date_search_by = moment(start_date).format("X");
+        end_date_search_by = moment(end_date).format("X");        
+    }
+    console.log(start_date_search_by);
+    console.log(end_date_search_by);
+    trips_ref.orderByChild("start_location").equalTo(start_location).on("value", function(start_date_snapshot) {
+        start_date_snapshot.forEach(function(data) {
+            console.log(date.val());
+        });
     });
     var search_result_source = $("#search_results").html();
     var search_result_template = Handlebars.compile(search_result_source);
