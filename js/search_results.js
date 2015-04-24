@@ -1,4 +1,4 @@
-var performSearch = function(ref, search_parameters, spinner) {
+var performSearch = function(ref, search_parameters, search_result_excludes, spinner) {
     var search_results = [];
     var trips_ref = ref.child("trips");
     moment.locale('en'); 
@@ -25,7 +25,12 @@ var performSearch = function(ref, search_parameters, spinner) {
                 (cur_matched_trip.stops[0].place_id == search_parameters.start_location.place_id)) {
                 if (search_parameters.end_location) {
                     if (cur_matched_trip.stops[cur_matched_trip.stops.length-1].place_id == search_parameters.end_location.place_id) {
-                        search_results.push(cur_matched_trip);
+                        console.log(search_result_excludes.split(', '));
+                        console.log(data.key());
+                        console.log(data.key() in search_result_excludes.split(', '));
+                        if (!(data.key() in search_result_excludes.split(', '))) {
+                            search_results.push(cur_matched_trip);
+                        }
                     }
                 }
             }
@@ -109,148 +114,168 @@ $(document).ready(function() {
 
     var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
 
-    // Get search params to populate inline form
-    var search_parameters = JSON.parse(localStorage.getItem('searched_trip'));
-    $('#search-start-location').val(search_parameters.start_location.formatted_address);
-    $('#search-end-location').val(search_parameters.end_location.formatted_address);
-    $('#search-start-date').val(moment(search_parameters.start_date).format("MMMM DD, YYYY"));
-    $('#search-end-date').val(moment(search_parameters.end_date).format("MMMM DD, YYYY"));
-    $('#flexible-dates-checkbox').prop('checked', search_parameters.are_dates_flexible);
+    var current_user;
+    var search_result_excludes;
+    var authData = ref.getAuth();
+    if (authData) {
+        ref.child("users").child(authData.uid).once('value', function(dataSnapshot) {
+            current_user = dataSnapshot.val();
+            search_result_excludes = current_user.trips;
+            showPage();
+            // var user_menu_source = $("#user-menu").html();
+            // var user_menu_template = Handlebars.compile(user_menu_source);
+            // var user_menu_source_processed = user_menu_template ({name: current_user.first_name});
+            // $("#user-menu").html(user_menu_source_processed);
+        });
+    } else {
+        document.location.href = "index.html";
+    }    
 
-    // Initialize loading spinner
-    var opts = {
-        lines: 13, // The number of lines to draw
-        length: 20, // The length of each line
-        width: 10, // The line thickness
-        radius: 30, // The radius of the inner circle
-        corners: 1, // Corner roundness (0..1)
-        rotate: 0, // The rotation offset
-        direction: 1, // 1: clockwise, -1: counterclockwise
-        color: '#ccc', // #rgb or #rrggbb or array of colors
-        speed: 1, // Rounds per second
-        trail: 60, // Afterglow percentage
-        shadow: false, // Whether to render a shadow
-        hwaccel: false, // Whether to use hardware acceleration
-        className: 'spinner_elt', // The CSS class to assign to the spinner
-        zIndex: 2e9, // The z-index (defaults to 2000000000)
-        top: '50%', // Top position relative to parent
-        left: '50%' // Left position relative to parent
-    };
+    var showPage = function() {
+        // Get search params to populate inline form
+        var search_parameters = JSON.parse(localStorage.getItem('searched_trip'));
+        $('#search-start-location').val(search_parameters.start_location.formatted_address);
+        $('#search-end-location').val(search_parameters.end_location.formatted_address);
+        $('#search-start-date').val(moment(search_parameters.start_date).format("MMMM DD, YYYY"));
+        $('#search-end-date').val(moment(search_parameters.end_date).format("MMMM DD, YYYY"));
+        $('#flexible-dates-checkbox').prop('checked', search_parameters.are_dates_flexible);
 
-    // Add autocomplete to location text fields
-    var autocomplete_start_location = new google.maps.places.Autocomplete(
-        (document.getElementById('search-start-location')),
-        { types: ['geocode'] }
-    );
-    var start_location = search_parameters.start_location;
-    google.maps.event.addListener(autocomplete_start_location, 'place_changed', function() {
-        // Get the place details from the autocomplete object.
-        start_location = autocomplete_start_location.getPlace();
-    });
-    // Create the autocomplete object for end location, restricting the search to geographical location types.
-    var autocomplete_end_location = new google.maps.places.Autocomplete(
-        (document.getElementById('search-end-location')),
-        { types: ['geocode'] }
-    );
-    var end_location = search_parameters.end_location;
-    google.maps.event.addListener(autocomplete_end_location, 'place_changed', function() {
-        // Get the place details from the autocomplete object.
-        end_location = autocomplete_end_location.getPlace();
-    });
+        // Initialize loading spinner
+        var opts = {
+            lines: 13, // The number of lines to draw
+            length: 20, // The length of each line
+            width: 10, // The line thickness
+            radius: 30, // The radius of the inner circle
+            corners: 1, // Corner roundness (0..1)
+            rotate: 0, // The rotation offset
+            direction: 1, // 1: clockwise, -1: counterclockwise
+            color: '#ccc', // #rgb or #rrggbb or array of colors
+            speed: 1, // Rounds per second
+            trail: 60, // Afterglow percentage
+            shadow: false, // Whether to render a shadow
+            hwaccel: false, // Whether to use hardware acceleration
+            className: 'spinner_elt', // The CSS class to assign to the spinner
+            zIndex: 2e9, // The z-index (defaults to 2000000000)
+            top: '50%', // Top position relative to parent
+            left: '50%' // Left position relative to parent
+        };
 
-    // Add a calendar for date fields
-    $('#search-start-date').datetimepicker({
-        locale: 'en',
-        format: 'MMMM DD, YYYY'
-    });
-    $('#search-end-date').datetimepicker({
-        locale: 'en',
-        format: 'MMMM DD, YYYY'
-    });
+        // Add autocomplete to location text fields
+        var autocomplete_start_location = new google.maps.places.Autocomplete(
+            (document.getElementById('search-start-location')),
+            { types: ['geocode'] }
+        );
+        var start_location = search_parameters.start_location;
+        google.maps.event.addListener(autocomplete_start_location, 'place_changed', function() {
+            // Get the place details from the autocomplete object.
+            start_location = autocomplete_start_location.getPlace();
+        });
+        // Create the autocomplete object for end location, restricting the search to geographical location types.
+        var autocomplete_end_location = new google.maps.places.Autocomplete(
+            (document.getElementById('search-end-location')),
+            { types: ['geocode'] }
+        );
+        var end_location = search_parameters.end_location;
+        google.maps.event.addListener(autocomplete_end_location, 'place_changed', function() {
+            // Get the place details from the autocomplete object.
+            end_location = autocomplete_end_location.getPlace();
+        });
 
-    // Link the date pickers 
-    var start_date = search_parameters.start_date;
-    $("#search-start-date").on("dp.change", function (e) {
-        if (e.date) {
-            start_date = e.date;
-            $('#search-end-date').data("DateTimePicker").minDate(e.date);
-        }
-    });
-    var end_date = search_parameters.end_date;
-    $("#search-end-date").on("dp.change", function (e) {
-        if (e.date) {
-            end_date = e.date;
-            $('#search-start-date').data("DateTimePicker").maxDate(e.date);
-        }
-    });  
+        // Add a calendar for date fields
+        $('#search-start-date').datetimepicker({
+            locale: 'en',
+            format: 'MMMM DD, YYYY'
+        });
+        $('#search-end-date').datetimepicker({
+            locale: 'en',
+            format: 'MMMM DD, YYYY'
+        });
 
-    performSearch(ref, search_parameters);
-
-    $('#search-inline-form').validator().on('submit', function (e) {
-        e.preventDefault();
-        var new_searched_trip = {}
-        new_searched_trip.start_location = start_location;//autocomplete_start_location.getPlace();
-        new_searched_trip.end_location = end_location;//autocomplete_end_location.getPlace();
-        new_searched_trip.start_date = start_date;
-        new_searched_trip.end_date = end_date;
-        new_searched_trip.are_dates_flexible = $('#flexible-dates-checkbox').is(":checked") ? true : false;
-        if (!start_location || !end_location) {
-            if (!start_location) {
-                $("#search-start-location").css("border", "solid red 1px");
-            } 
-            if (!end_location) {
-                $("#search-end-location").css("border", "solid red 1px");                
+        // Link the date pickers 
+        var start_date = search_parameters.start_date;
+        $("#search-start-date").on("dp.change", function (e) {
+            if (e.date) {
+                start_date = e.date;
+                $('#search-end-date').data("DateTimePicker").minDate(e.date);
             }
-            return;
-        } else {
-            localStorage.setItem('searched_trip', JSON.stringify(new_searched_trip));
+        });
+        var end_date = search_parameters.end_date;
+        $("#search-end-date").on("dp.change", function (e) {
+            if (e.date) {
+                end_date = e.date;
+                $('#search-start-date').data("DateTimePicker").maxDate(e.date);
+            }
+        });  
 
-            $(".spinner_div").css("padding-top", "25%");
-            var spinner = new Spinner(opts).spin();        
-            $('#spinner_container').append(spinner.el);
-            $('.search-result').fadeOut();//.delay(1000).fadeIn();
+        performSearch(ref, search_parameters, search_result_excludes);
 
-            performSearch(ref, new_searched_trip, spinner);
+        $('#search-inline-form').validator().on('submit', function (e) {
+            e.preventDefault();
+            var new_searched_trip = {}
+            new_searched_trip.start_location = start_location;//autocomplete_start_location.getPlace();
+            new_searched_trip.end_location = end_location;//autocomplete_end_location.getPlace();
+            new_searched_trip.start_date = start_date;
+            new_searched_trip.end_date = end_date;
+            new_searched_trip.are_dates_flexible = $('#flexible-dates-checkbox').is(":checked") ? true : false;
+            if (!start_location || !end_location) {
+                if (!start_location) {
+                    $("#search-start-location").css("border", "solid red 1px");
+                } 
+                if (!end_location) {
+                    $("#search-end-location").css("border", "solid red 1px");                
+                }
+                return;
+            } else {
+                localStorage.setItem('searched_trip', JSON.stringify(new_searched_trip));
 
-            // setTimeout(function() {
-            //    spinner.stop();
-            //    $(".spinner_div").css("padding-top", "0%");           
-            // }, 1000);     
+                $(".spinner_div").css("padding-top", "25%");
+                var spinner = new Spinner(opts).spin();        
+                $('#spinner_container').append(spinner.el);
+                $('.search-result').fadeOut();//.delay(1000).fadeIn();
 
-            //document.location.href = "search-results.html";
-        }        
-    });
+                performSearch(ref, new_searched_trip, search_result_excludes, spinner);
 
-    // $("#btn-update-search").click(function(e) {
-    //     // var searched_trip = {}
-    //     // searched_trip.start_location = autocomplete_start_location.getPlace();
-    //     // searched_trip.end_location = autocomplete_end_location.getPlace();
-    //     // searched_trip.start_date = start_date;
-    //     // searched_trip.end_date = end_date;
-    //     // searched_trip.are_dates_flexible = $('#flexible-dates-checkbox').is(":checked") ? true : false;
-    //     // if (!start_location || !end_location) {
-    //     //     if (!start_location) {
-    //     //         $("#search-start-location").css("border", "solid red 1px");
-    //     //     } 
-    //     //     if (!end_location) {
-    //     //         $("#search-end-location").css("border", "solid red 1px");                
-    //     //     }
-    //     //     return;
-    //     // } else {
-    //     //     localStorage.setItem('searched_trip', JSON.stringify(searched_trip));
-    //     //     //document.location.href = "views/search-results.html";
-    //     // }        
-    //     $(".spinner_div").css("padding-top", "25%");
-    //     var spinner = new Spinner(opts).spin();        
-    //     $('#spinner_container').append(spinner.el);
-    //     $('.search-result').fadeOut().delay(1000).fadeIn();
+                // setTimeout(function() {
+                //    spinner.stop();
+                //    $(".spinner_div").css("padding-top", "0%");           
+                // }, 1000);     
 
-    //     setTimeout(function() {
-    //        spinner.stop();
-    //        $(".spinner_div").css("padding-top", "0%");           
-    //     }, 1000);
-    // });
+                //document.location.href = "search-results.html";
+            }        
+        });
 
-    // Populate dummy search results
+        // $("#btn-update-search").click(function(e) {
+        //     // var searched_trip = {}
+        //     // searched_trip.start_location = autocomplete_start_location.getPlace();
+        //     // searched_trip.end_location = autocomplete_end_location.getPlace();
+        //     // searched_trip.start_date = start_date;
+        //     // searched_trip.end_date = end_date;
+        //     // searched_trip.are_dates_flexible = $('#flexible-dates-checkbox').is(":checked") ? true : false;
+        //     // if (!start_location || !end_location) {
+        //     //     if (!start_location) {
+        //     //         $("#search-start-location").css("border", "solid red 1px");
+        //     //     } 
+        //     //     if (!end_location) {
+        //     //         $("#search-end-location").css("border", "solid red 1px");                
+        //     //     }
+        //     //     return;
+        //     // } else {
+        //     //     localStorage.setItem('searched_trip', JSON.stringify(searched_trip));
+        //     //     //document.location.href = "views/search-results.html";
+        //     // }        
+        //     $(".spinner_div").css("padding-top", "25%");
+        //     var spinner = new Spinner(opts).spin();        
+        //     $('#spinner_container').append(spinner.el);
+        //     $('.search-result').fadeOut().delay(1000).fadeIn();
+
+        //     setTimeout(function() {
+        //        spinner.stop();
+        //        $(".spinner_div").css("padding-top", "0%");           
+        //     }, 1000);
+        // });
+
+        // Populate dummy search results
+
+    }
 
 });
