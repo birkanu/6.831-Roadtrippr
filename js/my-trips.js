@@ -60,17 +60,6 @@ $(document).ready(function() {
                                 $(".trip-creation").show();
                             }
 
-                            // for (var k = 0; k < search_result_context.trips.length; k++) {
-                            //     var idx3 = search_result_context.trips[k]["index"];;
-                            //     $("#trip_"+idx3).click(function(e) {
-                            //         alert("AM")
-                            //         // var clicked_trip = trip_dict[this.id];
-                            //         // localStorage.setItem('trip', JSON.stringify(clicked_trip));
-                            //         // this.href = "trip-details.html";
-                            //         // document.location.href = "trip-details.html";            
-                            //     });
-                            // }
-
                             // Add hover on abbreviated planned route for each route
                             for (var j = 0; j < search_result_context.trips.length; j++) {
                                 var idx2 = search_result_context.trips[j]["index"];
