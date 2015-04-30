@@ -14,6 +14,10 @@ $(document).ready(function() {
 	moment.locale('en');
 	var trip_uid = getQueryVariable("id");
 	var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
+	$(document.body).on('click', '#logout', function() {
+    	ref.unauth();
+    	document.location.href = "../index.html";
+  	});
 	var current_user_uid;
 	var current_user;
 	var authData = ref.getAuth();
@@ -21,6 +25,10 @@ $(document).ready(function() {
 		current_user_uid = authData.uid;
 		ref.child("users").child(current_user_uid).once('value', function(dataSnapshot) {
 			current_user = dataSnapshot.val();
+			var user_menu_source = $("#user-menu").html();
+      		var user_menu_template = Handlebars.compile(user_menu_source);
+      		var user_menu_source_processed = user_menu_template ({name: current_user.first_name});
+      		$("#user-menu").html(user_menu_source_processed);
 			ref.child("trips").child(trip_uid).once('value', function(dataSnapshot) {
                 var trip = dataSnapshot.val();    
 				// Render the HTML for the trip details
@@ -60,6 +68,8 @@ $(document).ready(function() {
 				google.maps.event.addListener(autocomplete, 'place_changed', function() {
 					// Get the place details from the autocomplete object.
 					new_stop = autocomplete.getPlace();
+					new_stop.lat = new_stop.geometry.location.lat();
+			      	new_stop.lng = new_stop.geometry.location.lng();
 				});
 				$(document.body).on('click', '#btn-add-new-stop' ,function() {
 					if (new_stop && $("#new-stop").val() != '') {
@@ -92,19 +102,19 @@ $(document).ready(function() {
 					reroute();
 				});
 				function reroute() {
-					var start = trip.stops[0].geometry.location;
-					var end = trip.stops[trip.stops.length - 1].geometry.location;
+					var start = trip.stops[0];
+					var end = trip.stops[trip.stops.length - 1];
 					var waypts = [];
 					for (var i = 1; i < trip.stops.length - 1; i++) {
-						var location = trip.stops[i].geometry.location;
+						var location = trip.stops[i];
 						waypts.push({
-						  	location: new google.maps.LatLng(location.k, location.D),
+						  	location: new google.maps.LatLng(location.lat, location.lng),
 						  	stopover:true
 						});
 					}
 					var request = {
-						origin: new google.maps.LatLng(start.k, start.D),
-						destination: new google.maps.LatLng(end.k, end.D),
+						origin: new google.maps.LatLng(start.lat, start.lng),
+						destination: new google.maps.LatLng(end.lat, end.lng),
 					  	waypoints: waypts,
 					  	optimizeWaypoints: false,
 					  	travelMode: google.maps.TravelMode.DRIVING
@@ -126,6 +136,8 @@ $(document).ready(function() {
 					google.maps.event.addListener(autocomplete, 'place_changed', function() {
 						// Get the place details from the autocomplete object.
 						new_stop = autocomplete.getPlace();
+						new_stop.lat = new_stop.geometry.location.lat();
+				      	new_stop.lng = new_stop.geometry.location.lng();
 					});
 				    stops = document.getElementById('stops');
 					sortable = new Sortable(stops, {

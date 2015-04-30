@@ -12,10 +12,18 @@ function getQueryVariable(variable) {
 $(document).ready(function() {
     var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
     var current_user;
+    $(document.body).on('click', '#logout', function() {
+        ref.unauth();
+        document.location.href = "../index.html";
+    });
     var authData = ref.getAuth();
     if (authData) {
         ref.child("users").child(authData.uid).once('value', function(dataSnapshot) {
             current_user = dataSnapshot.val();
+            var user_menu_source = $("#user-menu").html();
+            var user_menu_template = Handlebars.compile(user_menu_source);
+            var user_menu_source_processed = user_menu_template ({name: current_user.first_name});
+            $("#user-menu").html(user_menu_source_processed);
             var current_user_trip_uids = current_user.trips.split(", ");
             current_user_trip_uids = current_user_trip_uids.reverse();
             var search_result_source = $("#search_results").html();
@@ -23,7 +31,6 @@ $(document).ready(function() {
             var search_result_context = {
                 trips: []
             }
-
             for (var i = 0; i < current_user_trip_uids.length; i++) {
                 var idx = current_user_trip_uids[i];
                 (function(cntr) {

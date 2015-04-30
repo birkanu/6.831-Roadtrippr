@@ -145,7 +145,11 @@ $(document).ready(function() {
 			e.preventDefault();
 			var new_trip = {}
 			new_trip.start_location = start_location;
+      new_trip.start_location.lat = new_trip.start_location.geometry.location.lat();
+      new_trip.start_location.lng = new_trip.start_location.geometry.location.lng();
 			new_trip.end_location = end_location;
+      new_trip.end_location.lat = new_trip.end_location.geometry.location.lat();
+      new_trip.end_location.lng = new_trip.end_location.geometry.location.lng();
 			new_trip.start_date = start_date;
 			new_trip.end_date = end_date;
 			new_trip.are_dates_flexible = $('#flexible-dates-checkbox').is(":checked") ? true : false;
