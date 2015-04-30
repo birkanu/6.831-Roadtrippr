@@ -50,32 +50,19 @@
                 <h1>My Trips</h1>
             </div>
             <div class="alert alert-success trip-creation" role="alert" style="display:none;">You have successfully created a new trip.</div>
+            <div class="alert alert-success trip-deletion" role="alert" style="display:none;">You have successfully deleted your trip.</div>
             <section id="search_results" class="col-xs-12 col-sm-6 col-md-12">
-
-                {{#each trips}}
-                <a href="edit-trip.html?id={{this.trip_id}}">
-                    <article class="search-result row">
-                        <div class="col-xs-12 col-sm-12 col-md-3">
-                            <img class="map-img" src={{this.map_img_src}} alt={{this.map_alt_text}}>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 middle">
-                            <h3>{{this.trip_name}}</h3>
-                            <div class="full_route col-md-11" id={{full_route_id}}>
-                                <div class="cities_list">
-                                    {{#each this.planned_full_route}}
-                                        {{this}} 
-                                        {{#if @last}}
-                                        {{else}}
-                                            <i class="glyphicon glyphicon-arrow-right"></i>
-                                        {{/if}}
-                                        
-                                    {{/each}}
-                                </div>            
-                            </div>                
-                            <div id={{abbr_route_id}}>                    
-                                <div class="abbr_route">
+                    {{#each trips}}
+                    <a href="edit-trip.html?id={{this.trip_id}}">
+                        <article class="search-result row">
+                            <div class="col-xs-12 col-sm-12 col-md-3">
+                                <img class="map-img" src={{this.map_img_src}} alt={{this.map_alt_text}}>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 middle">
+                                <h3>{{this.trip_name}}</h3>
+                                <div class="full_route col-md-11" id={{full_route_id}}>
                                     <div class="cities_list">
-                                        {{#each this.planned_abbr_route}}
+                                        {{#each this.planned_full_route}}
                                             {{this}} 
                                             {{#if @last}}
                                             {{else}}
@@ -83,27 +70,42 @@
                                             {{/if}}
                                             
                                         {{/each}}
-                                    </div>
-                                </div>                    
+                                    </div>            
+                                </div>                
+                                <div id={{abbr_route_id}}>                    
+                                    <div class="abbr_route">
+                                        <div class="cities_list">
+                                            {{#each this.planned_abbr_route}}
+                                                {{this}} 
+                                                {{#if @last}}
+                                                {{else}}
+                                                    <i class="glyphicon glyphicon-arrow-right"></i>
+                                                {{/if}}
+                                                
+                                            {{/each}}
+                                        </div>
+                                    </div>                    
+                                </div>
+                                <div class="dates">
+                                    <p>From {{this.start_date}} to {{this.end_date}} ({{this.duration}})</p>
+                                </div>
+                                <div class="num_companions">
+                                    <p>Looking for {{this.num_companions}}</p>
+                                </div>        
+                            </div>           
+                            <div class="col-xs-12 col-sm-12 col-md-2 right">
+                                <div class="interested_users">
+                                  <p class='text-center'><a href="interested_users.html?trip_index={{index}}">See Interested Users</a></p>
+                                </div> 
                             </div>
-                            <div class="dates">
-                                <p>From {{this.start_date}} to {{this.end_date}} ({{this.duration}})</p>
-                            </div>
-                            <div class="num_companions">
-                                <p>Looking for {{this.num_companions}}</p>
-                            </div>        
-                        </div>           
-                        <div class="col-xs-12 col-sm-12 col-md-2 right">
-                            <div class="interested_users">
-                              <p class='text-center'><a href="interested_users.html?trip_index={{index}}">See Interested Users</a></p>
-                            </div> 
-                        </div>
-                        <span class="clearfix borda"></span>         
-                    </article>
-                </a>
-                {{/each}}   
-
+                            <span class="clearfix borda"></span>         
+                        </article>
+                    </a>
+                    {{/each}}   
             </section>
+                    <p class="text-center lead" id="noTripsMessage" style="display:none; padding-top:20">
+                     You currently do not have any trips. Go to your Home Page to create one! 
+                    </p>
         </div>
 
         <!-- JavaScript -->

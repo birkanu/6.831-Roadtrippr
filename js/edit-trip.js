@@ -204,12 +204,15 @@ $(document).ready(function() {
 				$('#btn-edit-trip-details').click(function() {
 					if (!$("#edit-trip-container").is(":visible")) {
 						$('.edit-trip-success-message').hide();
+						$('.delete-trip-error-message').hide();
+						$('#btn-delete-trip').hide();
 						$(this).text("Cancel");
 						$('#btn-share-trip').text("Done");
 
 					} else {
 						$(this).text("Edit Trip Details");	
-						$('#btn-share-trip').text("Share My Trip");
+						$('#btn-delete-trip').show();
+						$('#btn-share-trip').text("Save Changes");
 						setTripDetails();
 						$('#edit-trip-form').validator('validate');
 					}
@@ -223,10 +226,45 @@ $(document).ready(function() {
 				$('#edit-trip-form').validator().on('valid.bs.validator', function (e) {
 					isFormValid = true;
 				})
+				$('#btn-delete-trip').click(function() {
+					if (current_user) {
+						var onComplete = function(error) {
+						  if (error) {
+							$('.edit-trip-error-message').hide();
+							$('.edit-trip-success-message').hide();
+							$('.delete-trip-error-message').show();
+						  } else {
+						  	console.log("HERE1")
+							var current_user_trips = current_user.trips;
+							var trips_arr = current_user.trips.split(', ');
+							if (trips_arr.length == 1) {
+								console.log("HERE2");
+								current_user_trips = current_user_trips.replace(trip_uid, '');
+							} else {
+								console.log("JERE4")
+								current_user_trips = current_user_trips.replace(trip_uid + ', ', '');
+							}								console.log("HERE5")
+							ref.child("users").child(current_user_uid).update({
+							  	"trips": current_user_trips
+							});
+															console.log("HERE7")
+						    document.location.href = "my-trips.html?deleted-trip=true";
+						  }
+						};
+						var tripsRef = ref.child("trips");
+						tripsRef.child(trip_uid).remove(onComplete);
+					} else {
+						$('.edit-trip-error-message').hide();
+						$('.edit-trip-success-message').hide();
+						$('.delete-trip-error-message').show();
+					}
+				});
+
 				$('#btn-share-trip').click(function() {
 					if ($("#edit-trip-container").is(":visible")) {
 						if (isFormValid) {
 							$(this).text("Save Changes");
+							$('#btn-delete-trip').show();
 							$('#btn-edit-trip-details').text("Edit Trip Details");
 							// Save changes
 							trip.name = $('#edit-trip-form-trip-name').val();
@@ -269,6 +307,7 @@ $(document).ready(function() {
 							$('.edit-trip-success-message').show();
 						} else {
 							$('.edit-trip-success-message').hide();
+							$('.delete-trip-error-message').hide();
 							$('.edit-trip-error-message').show();
 						}
 					}

@@ -63,6 +63,11 @@ body {
   color: red;
 }
 
+.delete-trip-error-message {
+  font-size: 17px;
+  color: red;
+}
+
 .edit-trip-success-message {
   font-size: 17px;
   color: green;
