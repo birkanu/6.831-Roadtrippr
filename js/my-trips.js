@@ -9,6 +9,18 @@ function getQueryVariable(variable) {
  return(false);
 }
 
+function get_map_img_src(stops) {
+    var map_img_src = "http://maps.googleapis.com/maps/api/staticmap?scale=1&size=275x140&maptype=roadmap&format=png&visual_refresh=true";
+    var markers = "";
+    for (var i = 0; i < stops.length; i++) {
+        var stop = stops[i];
+        var markerLocation = "&markers=size:mid%7Ccolor:red%7C" + stop.lat + "," + stop.lng;
+        markers += markerLocation;
+    }
+    map_img_src += markers;
+    return map_img_src;
+}
+
 $(document).ready(function() {
     var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
     var current_user;
@@ -54,7 +66,7 @@ $(document).ready(function() {
                             duration: current_trip.duration,
                             num_companions: current_trip.companion_count,
                             are_dates_flexible: current_trip.are_dates_flexible,
-                            map_img_src: "http://dishaan.scripts.mit.edu/map-1.png",
+                            map_img_src: get_map_img_src(current_trip.stops),
                             notes: current_trip.notes,
                             map_alt_text: "Route map from " + current_trip.start_location + " to " + current_trip.end_location,
                         }
