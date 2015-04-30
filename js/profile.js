@@ -14,6 +14,8 @@ $(document).ready(function() {
 
   var user_source = $("#profile").html();
   var user_template = Handlebars.compile(user_source);
+  var user_menu_source = $("#user-menu").html();
+  var user_menu_template = Handlebars.compile(user_menu_source);
 
   // Get the current user from Firebase.
   var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
@@ -26,6 +28,9 @@ $(document).ready(function() {
       current_user = dataSnapshot.val();  // Object containing user data.
       $("#profile").html(user_template(current_user));  // Handlebars.
       photo = current_user.photo; // Save URL of photo to use in edit form.
+
+      var user_menu_source_processed = user_menu_template({name: current_user.first_name}); // Set name for nav bar.
+      $("#user-menu").html(user_menu_source_processed);
 
       // If this is a new user, prompt him/her to edit profile.
       var edit_profile = getQueryVariable("edit-profile");
