@@ -21,6 +21,96 @@ function get_map_img_src(stops) {
     return map_img_src;
 }
 
+// Closure 1.
+function getTrip(cntr, idx, ref, current_user_trip_uids, search_result_context, search_result_template) {
+    ref.child("trips").child(idx).once('value', function(dataSnapshot) {
+        var current_trip = dataSnapshot.val();
+        var stops = [];
+        for (var s = 0; s < current_trip.stops.length; s++) {
+            stops.push(current_trip.stops[s].name);
+        }
+        idx = current_user_trip_uids[cntr];
+
+        var interested_users = [];
+        var interested_users_uids = current_trip.interested_users.split(", ");
+        if (interested_users_uids[0] != "") {
+            console.log("first" + cntr);
+            for (var u = 0; u < interested_users_uids.length; u++) {
+                getInterestedUser(ref, u, interested_users, interested_users_uids, idx, current_trip, stops, cntr, current_user_trip_uids, search_result_context, search_result_template);
+            }
+        } else {
+            console.log("second" + cntr);
+            setTripData(idx, current_trip, stops, interested_users, cntr, current_user_trip_uids, search_result_context, search_result_template);
+        }
+    });
+}
+
+// Closure 2.
+function getInterestedUser(ref, u, interested_users, interested_users_uids, idx, current_trip, stops, cntr, current_user_trip_uids, search_result_context, search_result_template) {
+    ref.child("users").child(interested_users_uids[u]).once('value', function(dataSnapshot) {
+        var user = dataSnapshot.val();
+        user["uid"] = interested_users_uids[u]; // Add the user id so we know what user to retrieve when viewing profile.
+        interested_users.push(user);
+        if (u == interested_users_uids.length-1) {
+            setTripData(idx, current_trip, stops, interested_users, cntr, current_user_trip_uids, search_result_context, search_result_template);
+        }
+    });
+}
+
+function setTripData(idx, current_trip, stops, interested_users, cntr, current_user_trip_uids, search_result_context, search_result_template) {
+    trip = {
+        index: idx,
+        trip_id: idx,
+        full_route_id: "full_route_"+idx,
+        abbr_route_id: "abbr_route_"+idx,
+        trip_name: current_trip.name,
+        planned_abbr_route: [stops[0]].concat(stops[1]).concat("...").concat([stops[stops.length - 1]]),
+        planned_full_route: stops,
+        start_date: current_trip.start_date,
+        end_date: current_trip.end_date,
+        duration: current_trip.duration,
+        num_companions: current_trip.companion_count,
+        are_dates_flexible: current_trip.are_dates_flexible,
+        map_img_src: get_map_img_src(current_trip.stops),
+        notes: current_trip.notes,
+        map_alt_text: "Route map from " + current_trip.start_location + " to " + current_trip.end_location,
+        interested_users: interested_users
+    }
+    search_result_context.trips.push(trip);
+    // if (cntr == current_user_trip_uids.length - 1) {  -> this causes problem when there are trips with and without interested users
+    if (search_result_context.trips.length == current_user_trip_uids.length) {
+        var search_result_source_processed = search_result_template(search_result_context);
+        $("#search_results").html(search_result_source_processed);         
+        var shared_new_trip = getQueryVariable("shared-new-trip");
+        if (shared_new_trip) {
+            $(".trip-creation").show();
+        }
+        var deleted_trip = getQueryVariable("deleted-trip");
+        if (deleted_trip) {
+            $(".trip-deletion").show();
+        }
+        // Add hover on abbreviated planned route for each route
+        for (var j = 0; j < search_result_context.trips.length; j++) {
+            var idx2 = search_result_context.trips[j]["index"];
+            var full_route_div = $("#full_route_"+idx2);
+            var abbr_route_div = $("#abbr_route_"+idx2);
+            full_route_div.offset({left: full_route_div.offset().left, top: abbr_route_div.offset().top});
+            full_route_div.toggle();
+            abbr_route_div.mouseenter(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var full_route_div_id = this.id.replace("abbr", "full");
+                $("#"+full_route_div_id).fadeIn(500);
+            });
+            full_route_div.mouseleave(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var full_route_div_id = this.id.replace("abbr", "full");
+                $("#"+full_route_div_id).fadeOut(500);            
+            });        
+        }
+    }
+}
 $(document).ready(function() {
     var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
     var current_user;
@@ -46,66 +136,7 @@ $(document).ready(function() {
                 }
                 for (var i = 0; i < current_user_trip_uids.length; i++) {
                     var idx = current_user_trip_uids[i];
-                    (function(cntr) {
-                        ref.child("trips").child(idx).once('value', function(dataSnapshot) {
-                            current_trip = dataSnapshot.val();
-                            var stops = [];
-                            for (var s = 0; s < current_trip.stops.length; s++) {
-                                stops.push(current_trip.stops[s].name);
-                            }
-                            idx = current_user_trip_uids[cntr];
-                            trip = {
-                                index: idx,
-                                trip_id: idx,
-                                full_route_id: "full_route_"+idx,
-                                abbr_route_id: "abbr_route_"+idx,
-                                trip_name: current_trip.name,
-                                planned_abbr_route: [stops[0]].concat(stops[1]).concat("...").concat([stops[stops.length - 1]]),
-                                planned_full_route: stops,
-                                start_date: current_trip.start_date,
-                                end_date: current_trip.end_date,
-                                duration: current_trip.duration,
-                                num_companions: current_trip.companion_count,
-                                are_dates_flexible: current_trip.are_dates_flexible,
-                                map_img_src: get_map_img_src(current_trip.stops),
-                                notes: current_trip.notes,
-                                map_alt_text: "Route map from " + current_trip.start_location + " to " + current_trip.end_location,
-                            }
-                            search_result_context.trips.push(trip);
-                            if (cntr == current_user_trip_uids.length - 1) {
-                                var search_result_source_processed = search_result_template(search_result_context);
-                                $("#search_results").html(search_result_source_processed);         
-                                var shared_new_trip = getQueryVariable("shared-new-trip");
-                                if (shared_new_trip) {
-                                    $(".trip-creation").show();
-                                }
-                                var deleted_trip = getQueryVariable("deleted-trip");
-                                if (deleted_trip) {
-                                    $(".trip-deletion").show();
-                                }
-                                // Add hover on abbreviated planned route for each route
-                                for (var j = 0; j < search_result_context.trips.length; j++) {
-                                    var idx2 = search_result_context.trips[j]["index"];
-                                    var full_route_div = $("#full_route_"+idx2);
-                                    var abbr_route_div = $("#abbr_route_"+idx2);
-                                    full_route_div.offset({left: full_route_div.offset().left, top: abbr_route_div.offset().top});
-                                    full_route_div.toggle();
-                                    abbr_route_div.mouseenter(function(e) {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        var full_route_div_id = this.id.replace("abbr", "full");
-                                        $("#"+full_route_div_id).fadeIn(500);
-                                    });
-                                    full_route_div.mouseleave(function(e) {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        var full_route_div_id = this.id.replace("abbr", "full");
-                                        $("#"+full_route_div_id).fadeOut(500);            
-                                    });        
-                                }
-                            }
-                        });
-                    })(i, idx);
+                    getTrip(i, idx, ref, current_user_trip_uids, search_result_context, search_result_template);
                 }
             } else {
                 var deleted_trip = getQueryVariable("deleted-trip");

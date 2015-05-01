@@ -54,7 +54,8 @@
             <section id="search_results" class="col-xs-12 col-sm-6 col-md-12">
                     {{#each trips}}
                     <a href="edit-trip.html?id={{this.trip_id}}">
-                        <article class="search-result row">
+                    <article class="search-result row">
+                        <a href="edit-trip.html?id={{this.trip_id}}">
                             <div class="col-xs-12 col-sm-12 col-md-3">
                                 <img class="map-img" src={{this.map_img_src}} alt={{this.map_alt_text}}>
                             </div>
@@ -92,15 +93,27 @@
                                 <div class="num_companions">
                                     <p>Looking for {{this.num_companions}}</p>
                                 </div>        
-                            </div>           
-                            <div class="col-xs-12 col-sm-12 col-md-2 right">
-                                <div class="interested_users">
-                                  <p class='text-center'><a href="interested_users.html?trip_index={{index}}">See Interested Users</a></p>
-                                </div> 
-                            </div>
-                            <span class="clearfix borda"></span>         
-                        </article>
-                    </a>
+                            </div> 
+                        </a>          
+                        <div class="col-xs-12 col-sm-12 col-md-2 right">
+                            <!-- <div class="interested_users">
+                              <p class='text-center'><a href="interested_users.html?trip_index={{index}}">See Interested Users</a></p>
+                            </div> -->
+                            <div class="interested_users">
+                                <h4>Interested Users:</h4>
+                                <ul>
+                                    {{#each interested_users}}
+                                        <li>
+                                            <a href="profile.html?uid={{this.uid}}">{{this.first_name}}</a>
+                                            <!-- <a class="thumbnail" href="#" data-toggle="modal" data-target="#user-modal{{index}}"><img alt="" src={{this.photo}}></a> -->
+                                        </li>
+                                    {{/each}}           
+                                </ul>
+                            <div>                                
+
+                        </div>
+                        <span class="clearfix borda"></span>         
+                    </article>
                     {{/each}}   
             </section>
                     <p class="text-center lead" id="noTripsMessage" style="display:none; padding-top:20">
