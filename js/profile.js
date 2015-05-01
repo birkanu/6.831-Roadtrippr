@@ -9,6 +9,7 @@ function getQueryVariable(variable) {
  return(false);
 }
 
+
 $(document).ready(function() {
   var photo;
 
@@ -17,20 +18,47 @@ $(document).ready(function() {
   var user_menu_source = $("#user-menu").html();
   var user_menu_template = Handlebars.compile(user_menu_source);
 
-  // Get the current user from Firebase.
+  // Handle clicking on logout.
+  $(document.body).on('click', '#logout', function() {
+      ref.unauth();
+      document.location.href = "../index.html";
+  });  
+
   var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
 
   var current_user;
   var authData = ref.getAuth();
   var isFormValid;
+  var isSelf = true;
+
+  // Get the current user or another user from Firebase.
   if (authData) {
-    ref.child("users").child(authData.uid).once('value', function(dataSnapshot) {
+    var user = authData.uid;
+    var uid = getQueryVariable("uid");
+    if (uid) {
+      user = uid;
+      isSelf = false;
+    }
+    ref.child("users").child(user).once('value', function(dataSnapshot) {
       current_user = dataSnapshot.val();  // Object containing user data.
-      $("#profile").html(user_template(current_user));  // Handlebars.
+      $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
       photo = current_user.photo; // Save URL of photo to use in edit form.
 
-      var user_menu_source_processed = user_menu_template({name: current_user.first_name}); // Set name for nav bar.
-      $("#user-menu").html(user_menu_source_processed);
+      // If you're viewing your own profile page, then the current_user is yourself. Otherwise, the current_user is the
+      // user whose profile you're viewing. If you're viewing your own profile, hide the "Chat" and "Favorite" button.
+      // If you're viewing another person's profile, hide the "Edit Profile" button.
+      if (isSelf) {
+        var user_menu_source_processed = user_menu_template({name: current_user.first_name}); // Set name for nav bar.
+        $("#user-menu").html(user_menu_source_processed);
+        $("#chat-button").hide();
+        $("#favorite-button").hide();
+      } else {
+        ref.child("users").child(authData.uid).once('value', function(dataSnapshot) {
+          var user_menu_source_processed = user_menu_template({name: dataSnapshot.val().first_name}); // Set name for nav bar.
+          $("#user-menu").html(user_menu_source_processed);
+          $("#btn-edit-profile-details").hide();
+        })
+      }
 
       // If this is a new user, prompt him/her to edit profile.
       var edit_profile = getQueryVariable("edit-profile");
@@ -41,16 +69,19 @@ $(document).ready(function() {
         $('#btn-edit-profile-save').show(); // Do not allow the user to move on until successfully saving profile details.
         $('#edit-profile-form').validator('validate');  // Make the empty boxes red to show an error.
       }
-      // Initialize validation for later changes.
-      $('#edit-profile-form').validator({});
-      $('#edit-profile-form').validator().on('invalid.bs.validator', function (e) {
-        isFormValid = false;
-        console.log("form invalid");
-      })
-      $('#edit-profile-form').validator().on('valid.bs.validator', function (e) {
-        isFormValid = true;
-        console.log("form valid");
-      })
+
+      // Initialize validation for later changes. Only need to do this if you're looking at your own profile.
+      if (isSelf) {
+        $('#edit-profile-form').validator({});
+        $('#edit-profile-form').validator().on('invalid.bs.validator', function (e) {
+          isFormValid = false;
+          console.log("form invalid");
+        })
+        $('#edit-profile-form').validator().on('valid.bs.validator', function (e) {
+          isFormValid = true;
+          console.log("form valid");
+        })
+      }
     });
   } else {
     document.location.href = "index.html";
