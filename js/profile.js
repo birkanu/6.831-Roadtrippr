@@ -63,7 +63,7 @@ $(document).ready(function() {
       // If this is a new user, prompt him/her to edit profile.
       var edit_profile = getQueryVariable("edit-profile");
       if (edit_profile) {
-        $("#edit-profile-reminder").html("Please add details to your profile before continuing to use Roadtrippr");
+        $("#edit-profile-reminder").show();
         $("#profile-details, #edit-profile-container").toggle();  // Show the edit profile form.
         $('#btn-edit-profile-details').hide();
         $('#btn-edit-profile-save').show(); // Do not allow the user to move on until successfully saving profile details.
@@ -104,7 +104,7 @@ $(document).ready(function() {
   // Clicking on Save.
   $(document.body).on('click', '#btn-edit-profile-save', function() {
     if (isFormValid) {
-      $("#edit-profile-reminder").html(""); // Remove the note to update profile upon first login.
+      $("#edit-profile-reminder").hide(); // Remove the note to update profile upon first login.
 
       // Save data to Firebase.
       ref.child("users").child(authData.uid).update({
