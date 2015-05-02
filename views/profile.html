@@ -55,11 +55,15 @@
             <h5 id="city">{{city}}</h5>
             <h5 id="occupation">{{occupation}}</h5>
             <a href="mailto:{{email}}" class="label label-warning" id="email-button">EMAIL</a>
-            <a href="" class="label label-info" id="favorite-button">FAVORITE</a>
+            <button type="button" class="label label-info" id="accept-button" style="display:none;">ACCEPT</button>
+            <button type="button" class="label label-danger" id="reject-button" style="display:none;">REJECT</button>
             <br>
           </center>
           <br>
           <center>
+            <div id="accept-feedback" style="display:none">You have accepted {{first_name}} as a companion.</div>
+            <div id="reject-feedback" style="display:none">You have rejected {{first_name}} as a companion.</div>
+            <br>
             <div class="text-left">
               <h3 class="profile-info">About Me: </h3><span class="profile-info" id="about-me">{{about_me}}</span>
             </div>
