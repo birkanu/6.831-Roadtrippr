@@ -34,6 +34,12 @@ $(document).ready(function() {
 	}
 
 	$('.modal').on('show.bs.modal', centerModals);
+  $('#start-trip-modal').on('shown.bs.modal', function() {
+    $("#start-trip-modal-start-location").focus();
+  });
+  $('#find-trip-modal').on('shown.bs.modal', function() {
+    $("#find-trip-modal-start-location").focus();
+  });  
 	$(window).on('resize', centerModals);
 
   $('#start-trip-modal-start-location').val("");
