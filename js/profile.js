@@ -49,19 +49,68 @@ $(document).ready(function() {
 
     ref.child("users").child(userId).once('value', function(dataSnapshot) {
       current_user = dataSnapshot.val();  // Object containing user data.
-      $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
       photo = current_user.photo; // Save URL of photo to use in edit form.
 
       // If you're viewing your own profile page, then the current_user is yourself. Otherwise, the current_user is the
-      // user whose profile you're viewing. If you're viewing your own profile, hide the "Chat" and "Favorite" button.
-      // If you're viewing another person's profile, hide the "Edit Profile" button.
+      // user whose profile you're viewing. If you're viewing your own profile, hide the "Chat" and "Favorite" button and you can see your last name.
+      // If you're viewing another person's profile, hide the "Edit Profile" button and you can't see that person's last name.
       if (isSelf) {
         var user_menu_source_processed = user_menu_template({name: current_user.first_name}); // Set name for nav bar.
         $("#user-menu").html(user_menu_source_processed);
-        $("#email-button").hide();
-        $("#accept-button").hide();
-        $("#reject-button").hide();
-      } else {
+
+        // Add companioned trips to profile.
+        var companioned_trips = [];
+        var companioned_trips_ids = current_user.companioned_trips.split(", ");
+        if (companioned_trips_ids[0] == "") companioned_trips_ids = [];
+
+        if (companioned_trips_ids.length > 0) {
+          companioned_trips_ids.forEach(function(tid, i) {
+            ref.child("trips").child(tid).once('value', function(dataSnapshot) {
+              var trip = dataSnapshot.val();
+              trip["tid"] = tid;
+              companioned_trips.push(trip);
+              if (companioned_trips.length == companioned_trips_ids.length) {
+                current_user["companioned_trips"] = companioned_trips;
+                $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
+
+                $("#email-button").hide();
+                $("#accept-button").hide();
+                $("#reject-button").hide();
+                $("#last-name").show();
+        
+                // Initialize validation for later changes. Only need to do this if you're looking at your own profile.
+                $('#edit-profile-form').validator({});
+                $('#edit-profile-form').validator().on('invalid.bs.validator', function (e) {
+                  isFormValid = false;
+                  console.log("form invalid");
+                })
+                $('#edit-profile-form').validator().on('valid.bs.validator', function (e) {
+                  isFormValid = true;
+                  console.log("form valid");
+                })
+              }
+            });
+          });
+        } else {
+          $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
+          $("#email-button").hide();
+          $("#accept-button").hide();
+          $("#reject-button").hide();
+          $("#last-name").show();
+          
+          // Initialize validation for later changes. Only need to do this if you're looking at your own profile.
+          $('#edit-profile-form').validator({});
+          $('#edit-profile-form').validator().on('invalid.bs.validator', function (e) {
+            isFormValid = false;
+            console.log("form invalid");
+          })
+          $('#edit-profile-form').validator().on('valid.bs.validator', function (e) {
+            isFormValid = true;
+            console.log("form valid");
+          })
+        }
+      } 
+      else {
         ref.child("users").child(authData.uid).once('value', function(dataSnapshot) {
           var user_menu_source_processed = user_menu_template({name: dataSnapshot.val().first_name}); // Set name for nav bar.
           $("#user-menu").html(user_menu_source_processed);
@@ -75,12 +124,14 @@ $(document).ready(function() {
         $("#reject-button").show();
       }
 
+      // Coming from the action where you accept a user as a companion for a trip.
       if (getQueryVariable("accept_feedback")) {
         $("#accept-button").hide();
         $("#reject-button").hide();
         $("#accept-feedback").show();
       }
 
+      // Coming from the action where you reject a user as to be a com
       if (getQueryVariable("reject_feedback")) {
         $("#accept-button").hide();
         $("#reject-button").hide();
@@ -95,19 +146,6 @@ $(document).ready(function() {
         $('#btn-edit-profile-details').hide();
         $('#btn-edit-profile-save').show(); // Do not allow the user to move on until successfully saving profile details.
         $('#edit-profile-form').validator('validate');  // Make the empty boxes red to show an error.
-      }
-
-      // Initialize validation for later changes. Only need to do this if you're looking at your own profile.
-      if (isSelf) {
-        $('#edit-profile-form').validator({});
-        $('#edit-profile-form').validator().on('invalid.bs.validator', function (e) {
-          isFormValid = false;
-          console.log("form invalid");
-        })
-        $('#edit-profile-form').validator().on('valid.bs.validator', function (e) {
-          isFormValid = true;
-          console.log("form valid");
-        })
       }
     });
   } else {
