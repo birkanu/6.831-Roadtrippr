@@ -49,15 +49,6 @@ function getTrip(cntr, idx, ref, current_user_trip_uids, search_result_context, 
             setTripData(idx, current_trip, stops, interested_users, companions, cntr, current_user_trip_uids, search_result_context, search_result_template);
         }
 
-        // if (interested_users_uids[0] != "") {
-        //     for (var u = 0; u < interested_users_uids.length; u++) {
-        //         getUser(ref, u, interested_users, interested_users_uids, idx, current_trip, stops, cntr, current_user_trip_uids, search_result_context, search_result_template);
-        //     }
-        // } else {
-        //     setTripData(idx, current_trip, stops, interested_users, cntr, current_user_trip_uids, search_result_context, search_result_template);
-        // }
-
-
     });
 }
 
@@ -85,7 +76,7 @@ function setTripData(idx, current_trip, stops, interested_users, companions, cnt
         full_route_id: "full_route_"+idx,
         abbr_route_id: "abbr_route_"+idx,
         trip_name: current_trip.name,
-        planned_abbr_route: [stops[0]].concat(stops[1]).concat("...").concat([stops[stops.length - 1]]),
+        planned_abbr_route: (stops.length > 3) ? [stops[0]].concat(stops[1]).concat("...").concat([stops[stops.length - 1]]) : stops,
         planned_full_route: stops,
         start_date: current_trip.start_date,
         end_date: current_trip.end_date,
