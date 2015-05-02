@@ -1,4 +1,4 @@
-var performSearch = function(ref, search_parameters, search_result_excludes, spinner) {
+var performSearch = function(ref, search_parameters, search_result_excludes) {
     var search_results = [];
     var trips_ref = ref.child("trips");
     moment.locale('en'); 
@@ -13,7 +13,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes, spi
     // console.log(start_date_search_by);
     // console.log(end_date_search_by);
 
-    var search_result_source = $("#search_results").html();
+    var search_result_source = $("#search_results_template").html();
     var search_result_template = Handlebars.compile(search_result_source);
     var search_result_context = {
         trips: []
@@ -25,9 +25,11 @@ var performSearch = function(ref, search_parameters, search_result_excludes, spi
                 (cur_matched_trip.stops[0].place_id == search_parameters.start_location.place_id)) {
                 if (search_parameters.end_location) {
                     if (cur_matched_trip.stops[cur_matched_trip.stops.length-1].place_id == search_parameters.end_location.place_id) {
-                        console.log(search_result_excludes.split(', '));
                         console.log(data.key());
-                        console.log(data.key() in search_result_excludes.split(', '));
+                        if (!search_result_excludes) {
+                            search_results.push(cur_matched_trip);
+                            return;
+                        }
                         if (!(data.key() in search_result_excludes.split(', '))) {
                             search_results.push(cur_matched_trip);
                         }
@@ -86,7 +88,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes, spi
         for (var j = 0; j < search_result_context.trips.length; j++) {
             var full_route_div = $("#full_route_"+j);
             var abbr_route_div = $("#abbr_route_"+j);
-            full_route_div.offset({left: full_route_div.offset().left, top: abbr_route_div.offset().top});
+            // full_route_div.offset({left: full_route_div.offset().left, top: abbr_route_div.offset().top});
             full_route_div.toggle();
             abbr_route_div.mouseenter(function(e) {
                 e.preventDefault();
@@ -100,14 +102,10 @@ var performSearch = function(ref, search_parameters, search_result_excludes, spi
                 var full_route_div_id = this.id.replace("abbr", "full");
                 $("#"+full_route_div_id).fadeOut(500);            
             });        
-        }        
+        }      
+        $('.search-result').show();          
     });        
 
-    $('.search-result').fadeIn(500);
-    if (spinner) {
-        spinner.stop();
-        $(".spinner_div").css("padding-top", "0%");                   
-    }
 }
 
 $(document).ready(function() {
@@ -139,26 +137,6 @@ $(document).ready(function() {
         $('#search-start-date').val(moment(search_parameters.start_date).format("MMMM DD, YYYY"));
         $('#search-end-date').val(moment(search_parameters.end_date).format("MMMM DD, YYYY"));
         $('#flexible-dates-checkbox').prop('checked', search_parameters.are_dates_flexible);
-
-        // Initialize loading spinner
-        var opts = {
-            lines: 13, // The number of lines to draw
-            length: 20, // The length of each line
-            width: 10, // The line thickness
-            radius: 30, // The radius of the inner circle
-            corners: 1, // Corner roundness (0..1)
-            rotate: 0, // The rotation offset
-            direction: 1, // 1: clockwise, -1: counterclockwise
-            color: '#ccc', // #rgb or #rrggbb or array of colors
-            speed: 1, // Rounds per second
-            trail: 60, // Afterglow percentage
-            shadow: false, // Whether to render a shadow
-            hwaccel: false, // Whether to use hardware acceleration
-            className: 'spinner_elt', // The CSS class to assign to the spinner
-            zIndex: 2e9, // The z-index (defaults to 2000000000)
-            top: '50%', // Top position relative to parent
-            left: '50%' // Left position relative to parent
-        };
 
         // Add autocomplete to location text fields
         var autocomplete_start_location = new google.maps.places.Autocomplete(
@@ -228,53 +206,12 @@ $(document).ready(function() {
             } else {
                 localStorage.setItem('searched_trip', JSON.stringify(new_searched_trip));
 
-                $(".spinner_div").css("padding-top", "25%");
-                var spinner = new Spinner(opts).spin();        
-                $('#spinner_container').append(spinner.el);
-                $('.search-result').fadeOut();//.delay(1000).fadeIn();
+                $('.search-result').hide();
 
-                performSearch(ref, new_searched_trip, search_result_excludes, spinner);
+                performSearch(ref, new_searched_trip, search_result_excludes);
 
-                // setTimeout(function() {
-                //    spinner.stop();
-                //    $(".spinner_div").css("padding-top", "0%");           
-                // }, 1000);     
-
-                //document.location.href = "search-results.html";
             }        
         });
-
-        // $("#btn-update-search").click(function(e) {
-        //     // var searched_trip = {}
-        //     // searched_trip.start_location = autocomplete_start_location.getPlace();
-        //     // searched_trip.end_location = autocomplete_end_location.getPlace();
-        //     // searched_trip.start_date = start_date;
-        //     // searched_trip.end_date = end_date;
-        //     // searched_trip.are_dates_flexible = $('#flexible-dates-checkbox').is(":checked") ? true : false;
-        //     // if (!start_location || !end_location) {
-        //     //     if (!start_location) {
-        //     //         $("#search-start-location").css("border", "solid red 1px");
-        //     //     } 
-        //     //     if (!end_location) {
-        //     //         $("#search-end-location").css("border", "solid red 1px");                
-        //     //     }
-        //     //     return;
-        //     // } else {
-        //     //     localStorage.setItem('searched_trip', JSON.stringify(searched_trip));
-        //     //     //document.location.href = "views/search-results.html";
-        //     // }        
-        //     $(".spinner_div").css("padding-top", "25%");
-        //     var spinner = new Spinner(opts).spin();        
-        //     $('#spinner_container').append(spinner.el);
-        //     $('.search-result').fadeOut().delay(1000).fadeIn();
-
-        //     setTimeout(function() {
-        //        spinner.stop();
-        //        $(".spinner_div").css("padding-top", "0%");           
-        //     }, 1000);
-        // });
-
-        // Populate dummy search results
 
     }
 

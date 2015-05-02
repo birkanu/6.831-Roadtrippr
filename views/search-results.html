@@ -126,6 +126,74 @@
                 
                 </div>
             </section>
+
+                        <section id="search_results_template" class="col-xs-12 col-sm-6 col-md-12" style="display:none;">
+
+                {{#each trips}}
+                <a href="" id={{this.trip_id}}>
+                <article class="search-result row">
+                    <div class="col-xs-12 col-sm-12 col-md-3">
+                        <img class="map-img" src={{this.map_img_src}} alt={{this.map_alt_text}}>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 middle">
+                        <h3>{{this.trip_name}}</h3>
+                        <div class="full_route col-md-11" id={{full_route_id}}>
+                            <p>
+                                <div class="cities_list">
+                                    {{#each this.planned_full_route}}
+                                        {{this}} 
+                                        {{#if @last}}
+                                        {{else}}
+                                            <i class="glyphicon glyphicon-arrow-right"></i>
+                                        {{/if}}
+                                        
+                                    {{/each}}
+                                </div>
+                            </p>                
+                        </div>                
+                        <div id={{abbr_route_id}}>                    
+                            <div class="abbr_route" >
+                            <p>
+                                <div class="cities_list">
+                                    {{#each this.planned_abbr_route}}
+                                        {{this}} 
+                                        {{#if @last}}
+                                        {{else}}
+                                            <i class="glyphicon glyphicon-arrow-right"></i>
+                                        {{/if}}
+                                        
+                                    {{/each}}
+                                </div>
+                            </p>
+                            </div>                    
+                        </div>
+
+                        <div class="dates">
+                            <p>From {{this.start_date}} to {{this.end_date}} ({{this.duration}})</p>
+                        </div>
+                        <div class="num_companions">
+                            <p>Looking for {{this.num_companions}}</p>
+                        </div>                
+                    </div>              
+                    <div class="col-xs-12 col-sm-12 col-md-1 right">
+                        <img class="creator_img" src={{this.creator_img_src}} />
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-2">
+                        <div class="user_data">
+                            <h4 class="user_data">{{this.creator_name}}</h4>
+                            <p class="user_data">{{this.creator_age}}</p>
+                            <p class="user_data">{{this.creator_location}}</p>
+                        </div>
+                    </div>
+                    <span class="clearfix borda"></span>         
+                </article>
+            </a>
+                {{/each}}   
+
+                <!-- <div id="spinner_container" class="spinner_div"> -->
+                
+                </div>
+            </section>
         </div>
 
         <!-- JavaScript -->
