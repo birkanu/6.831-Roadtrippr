@@ -20,3 +20,11 @@ div .text-left {
   border: 2px solid #000;
   outline: none;
 }
+
+#accept-feedback {
+  color: green;
+}
+
+#reject-feedback {
+  color: red;
+}

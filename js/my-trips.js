@@ -33,29 +33,52 @@ function getTrip(cntr, idx, ref, current_user_trip_uids, search_result_context, 
 
         var interested_users = [];
         var interested_users_uids = current_trip.interested_users.split(", ");
-        if (interested_users_uids[0] != "") {
-            for (var u = 0; u < interested_users_uids.length; u++) {
-                getInterestedUser(ref, u, interested_users, interested_users_uids, idx, current_trip, stops, cntr, current_user_trip_uids, search_result_context, search_result_template);
+        if (interested_users_uids[0] == "") interested_users_uids = [];
+
+        var companions = [];
+        var companions_uids = current_trip.companions.split(", ");
+        if (companions_uids[0] == "") companions_uids = [];
+        
+        var combined_users_uids = interested_users_uids.concat(companions_uids);
+
+        if (combined_users_uids.length > 0) {
+            for (var u = 0; u < combined_users_uids.length; u++) {
+                getUser(ref, u, interested_users_uids.length, interested_users, companions, combined_users_uids, idx, current_trip, stops, cntr, current_user_trip_uids, search_result_context, search_result_template);
             }
         } else {
-            setTripData(idx, current_trip, stops, interested_users, cntr, current_user_trip_uids, search_result_context, search_result_template);
+            setTripData(idx, current_trip, stops, interested_users, companions, cntr, current_user_trip_uids, search_result_context, search_result_template);
         }
+
+        // if (interested_users_uids[0] != "") {
+        //     for (var u = 0; u < interested_users_uids.length; u++) {
+        //         getUser(ref, u, interested_users, interested_users_uids, idx, current_trip, stops, cntr, current_user_trip_uids, search_result_context, search_result_template);
+        //     }
+        // } else {
+        //     setTripData(idx, current_trip, stops, interested_users, cntr, current_user_trip_uids, search_result_context, search_result_template);
+        // }
+
+
     });
 }
 
 // Closure 2.
-function getInterestedUser(ref, u, interested_users, interested_users_uids, idx, current_trip, stops, cntr, current_user_trip_uids, search_result_context, search_result_template) {
-    ref.child("users").child(interested_users_uids[u]).once('value', function(dataSnapshot) {
+function getUser(ref, u, num_interested_users, interested_users, companions, combined_users_uids, idx, current_trip, stops, cntr, current_user_trip_uids, search_result_context, search_result_template) {
+    ref.child("users").child(combined_users_uids[u]).once('value', function(dataSnapshot) {
         var user = dataSnapshot.val();
-        user["uid"] = interested_users_uids[u]; // Add the user id so we know what user to retrieve when viewing profile.
-        interested_users.push(user);
-        if (u == interested_users_uids.length-1) {
-            setTripData(idx, current_trip, stops, interested_users, cntr, current_user_trip_uids, search_result_context, search_result_template);
+        user["uid"] = combined_users_uids[u]; // Add the user id so we know what user to retrieve when viewing profile.
+        user["tripid"] = idx; // Add the trip id so we know what trip the user is interested in when accepting/rejecting the user.
+        if (u < num_interested_users) {
+            interested_users.push(user);
+        } else {
+            companions.push(user);
+        }
+        if (u == combined_users_uids.length-1) {
+            setTripData(idx, current_trip, stops, interested_users, companions, cntr, current_user_trip_uids, search_result_context, search_result_template);
         }
     });
 }
 
-function setTripData(idx, current_trip, stops, interested_users, cntr, current_user_trip_uids, search_result_context, search_result_template) {
+function setTripData(idx, current_trip, stops, interested_users, companions, cntr, current_user_trip_uids, search_result_context, search_result_template) {
     trip = {
         index: idx,
         trip_id: idx,
@@ -72,7 +95,8 @@ function setTripData(idx, current_trip, stops, interested_users, cntr, current_u
         map_img_src: get_map_img_src(current_trip.stops),
         notes: current_trip.notes,
         map_alt_text: "Route map from " + current_trip.start_location + " to " + current_trip.end_location,
-        interested_users: interested_users
+        interested_users: interested_users,
+        companions: companions
     }
     search_result_context.trips.push(trip);
     // if (cntr == current_user_trip_uids.length - 1) {  -> this causes problem when there are trips with and without interested users

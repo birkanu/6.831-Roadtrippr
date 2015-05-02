@@ -45,6 +45,7 @@ $(document).ready(function() {
 	new_trip_details.stops.push(new_trip.start_location, new_trip.end_location);
 	new_trip_details.notes = new_trip.notes;
 	new_trip_details.interested_users = "";
+	new_trip_details.companions = "";
 
 	// Render the HTML for the trip details
 	var trip_details_source = $("#trip-details").html();

@@ -57,9 +57,9 @@ div h1 {
     display: table;
 }
 
-.interested_users {
+.interested_users, .companions {
     display: table-cell;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 .search-result ul { 

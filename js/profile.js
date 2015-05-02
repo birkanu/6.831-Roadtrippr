@@ -29,17 +29,23 @@ $(document).ready(function() {
   var current_user;
   var authData = ref.getAuth();
   var isFormValid;
-  var isSelf = true;
+  var isSelf;
+  
+  var userId;
+  var tripId;
 
   // Get the current user or another user from Firebase.
   if (authData) {
-    var user = authData.uid;
-    var uid = getQueryVariable("uid");
+    var uid = getQueryVariable("uid");  // Parameter for viewing a user's profile.
     if (uid) {
-      user = uid;
+      userId = uid;
       isSelf = false;
+    } else {
+      userId = authData.uid;
+      isSelf = true;
     }
-    ref.child("users").child(user).once('value', function(dataSnapshot) {
+
+    ref.child("users").child(userId).once('value', function(dataSnapshot) {
       current_user = dataSnapshot.val();  // Object containing user data.
       $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
       photo = current_user.photo; // Save URL of photo to use in edit form.
@@ -51,13 +57,33 @@ $(document).ready(function() {
         var user_menu_source_processed = user_menu_template({name: current_user.first_name}); // Set name for nav bar.
         $("#user-menu").html(user_menu_source_processed);
         $("#email-button").hide();
-        $("#favorite-button").hide();
+        $("#accept-button").hide();
+        $("#reject-button").hide();
       } else {
         ref.child("users").child(authData.uid).once('value', function(dataSnapshot) {
           var user_menu_source_processed = user_menu_template({name: dataSnapshot.val().first_name}); // Set name for nav bar.
           $("#user-menu").html(user_menu_source_processed);
           $("#btn-edit-profile-details").hide();
         })
+      }
+
+      // If there's a trip id parameter passed in, then we're looking at an interested user whom we have to accept or reject for the trip.
+      if (tripId) {
+        $("#accept-button").show();
+        $("#reject-button").show();
+      }
+
+      if (getQueryVariable("accept_feedback")) {
+        console.log("hi");
+        $("#accept-button").hide();
+        $("#reject-button").hide();
+        $("#accept-feedback").show();
+      }
+
+      if (getQueryVariable("reject_feedback")) {
+        $("#accept-button").hide();
+        $("#reject-button").hide();
+        $("#reject-feedback").show();  
       }
 
       // If this is a new user, prompt him/her to edit profile.
@@ -86,6 +112,49 @@ $(document).ready(function() {
   } else {
     document.location.href = "index.html";
   }
+
+  // Clicking on Accept.
+  $(document.body).on('click', '#accept-button', function() {
+    // Remove userId from interested_users and add to companions.
+    ref.child("trips").child(tripId).once("value", function(dataSnapshot) {
+      var trip = dataSnapshot.val();
+      
+      var interested_users = trip.interested_users.split(", ");
+      var updated_interested_users = [];
+      interested_users.forEach(function(uid, i) {
+        if (uid != userId) updated_interested_users.push(uid);
+      });
+      updated_interested_users = updated_interested_users.join(", ");
+
+      var updated_companions = trip.companions + ", " + userId;
+
+      ref.child("trips").child(tripId).update({
+        interested_users: updated_interested_users,
+        companions: updated_companions
+      });
+      document.location.href = "profile.html?uid="+userId+"&accept_feedback=true";
+    })
+  });
+
+  // Clicking on Reject.
+  $(document.body).on('click', '#reject-button', function() {
+    // Remove userId from interested_users.
+    ref.child("trips").child(tripId).once("value", function(dataSnapshot) {
+      var trip = dataSnapshot.val();
+      
+      var interested_users = trip.interested_users.split(", ");
+      var updated_interested_users = [];
+      interested_users.forEach(function(uid, i) {
+        if (uid != userId) updated_interested_users.push(uid);
+      });
+      updated_interested_users = updated_interested_users.join(", ");
+
+      ref.child("trips").child(tripId).update({
+        interested_users: updated_interested_users,
+      });
+      document.location.href = "profile.html?uid="+userId+"&reject_feedback=true";
+    })
+  });
 
   // Clicking on Edit Profile or Cancel.
   $(document.body).on('click', '#btn-edit-profile-details', function() {
