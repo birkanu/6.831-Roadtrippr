@@ -50,7 +50,7 @@ $(document).ready(function() {
       if (isSelf) {
         var user_menu_source_processed = user_menu_template({name: current_user.first_name}); // Set name for nav bar.
         $("#user-menu").html(user_menu_source_processed);
-        $("#chat-button").hide();
+        $("#email-button").hide();
         $("#favorite-button").hide();
       } else {
         ref.child("users").child(authData.uid).once('value', function(dataSnapshot) {
