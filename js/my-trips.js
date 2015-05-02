@@ -34,12 +34,10 @@ function getTrip(cntr, idx, ref, current_user_trip_uids, search_result_context, 
         var interested_users = [];
         var interested_users_uids = current_trip.interested_users.split(", ");
         if (interested_users_uids[0] != "") {
-            console.log("first" + cntr);
             for (var u = 0; u < interested_users_uids.length; u++) {
                 getInterestedUser(ref, u, interested_users, interested_users_uids, idx, current_trip, stops, cntr, current_user_trip_uids, search_result_context, search_result_template);
             }
         } else {
-            console.log("second" + cntr);
             setTripData(idx, current_trip, stops, interested_users, cntr, current_user_trip_uids, search_result_context, search_result_template);
         }
     });

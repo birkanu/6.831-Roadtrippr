@@ -44,6 +44,7 @@ $(document).ready(function() {
 	new_trip_details.stops = []; 
 	new_trip_details.stops.push(new_trip.start_location, new_trip.end_location);
 	new_trip_details.notes = new_trip.notes;
+	new_trip_details.interested_users = "";
 
 	// Render the HTML for the trip details
 	var trip_details_source = $("#trip-details").html();
@@ -279,7 +280,7 @@ $(document).ready(function() {
 				new_trip_details.duration = duration > 1 ? duration + " Days" : duration + " Day";
 				new_trip_details.are_dates_flexible = $('#flexible-dates-checkbox').is(":checked") ? true : false;
 				new_trip_details.companion_count = $("#edit-trip-form-companion-count option:selected").text();
-				new_trip_details.notes = $('#edit-trip-form-notes').val();	
+				new_trip_details.notes = $('#edit-trip-form-notes').val();
 				// Re-render Handlebars Template
 				var new_trip_details_source_processed = trip_details_template(new_trip_details);
     			$("#trip-details").html(new_trip_details_source_processed);
