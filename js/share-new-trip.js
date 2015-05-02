@@ -225,6 +225,10 @@ $(document).ready(function() {
 		defaultDate: new_trip_details.end_date
 	});
 
+	$('.glyphicon-calendar').click(function(){
+		$(this).parent().parent().find('.form-control').data("DateTimePicker").show();
+	});
+
 	setTripDetails();
 
 	// Link the date pickers 
@@ -261,11 +265,9 @@ $(document).ready(function() {
 	var isFormValid;
 	$('#edit-trip-form').validator().on('invalid.bs.validator', function (e) {
 		isFormValid = false;
-		console.log("form invalid");
 	})
 	$('#edit-trip-form').validator().on('valid.bs.validator', function (e) {
 		isFormValid = true;
-		console.log("form valid");
 	})
 
 	$('#btn-share-trip').click(function() {

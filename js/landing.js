@@ -143,6 +143,10 @@ $(document).ready(function() {
       }
   });
 
+  $('.glyphicon-calendar').click(function(){
+    $(this).parent().parent().find('.form-control').data("DateTimePicker").show();
+  });
+
 	$('#start-trip-form').validator({});
   $('#find-trip-form').validator({});
 
