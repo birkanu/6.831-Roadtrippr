@@ -45,6 +45,8 @@ $(document).ready(function() {
       isSelf = true;
     }
 
+    tripId = getQueryVariable("tripid");
+
     ref.child("users").child(userId).once('value', function(dataSnapshot) {
       current_user = dataSnapshot.val();  // Object containing user data.
       $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
@@ -74,7 +76,6 @@ $(document).ready(function() {
       }
 
       if (getQueryVariable("accept_feedback")) {
-        console.log("hi");
         $("#accept-button").hide();
         $("#reject-button").hide();
         $("#accept-feedback").show();
@@ -115,7 +116,8 @@ $(document).ready(function() {
 
   // Clicking on Accept.
   $(document.body).on('click', '#accept-button', function() {
-    // Remove userId from interested_users and add to companions.
+    // Remove userId from interested_users and add to companions for a Trip object in Firebase.
+    // Remove tripId from interested_trips and add to companioned_trips for a User object in Firebase.
     ref.child("trips").child(tripId).once("value", function(dataSnapshot) {
       var trip = dataSnapshot.val();
       
@@ -126,19 +128,46 @@ $(document).ready(function() {
       });
       updated_interested_users = updated_interested_users.join(", ");
 
-      var updated_companions = trip.companions + ", " + userId;
+
+      var updated_companions;
+      if (trip.companions == "") {
+        updated_companions = userId;
+      } else {
+        updated_companions = trip.companions + ", " + userId;
+      }
 
       ref.child("trips").child(tripId).update({
         interested_users: updated_interested_users,
         companions: updated_companions
       });
+
+      var interested_trips = current_user.interested_trips.split(", ");
+      var updated_interested_trips = [];
+      interested_trips.forEach(function(tid, i) {
+        if (tid != tripId) updated_interested_trips.push(tid);
+      });
+      updated_interested_trips = updated_interested_trips.join(", ");
+
+      var updated_companioned_trips;
+      if (current_user.companioned_trips == "") {
+        updated_companioned_trips = tripId;
+      } else {
+        updated_companioned_trips = current_user.companioned_trips + ", " + tripId;
+      }
+
+      ref.child("users").child(userId).update({
+        interested_trips: updated_interested_trips,
+        companioned_trips: updated_companioned_trips
+      });
+
       document.location.href = "profile.html?uid="+userId+"&accept_feedback=true";
     })
   });
 
   // Clicking on Reject.
   $(document.body).on('click', '#reject-button', function() {
-    // Remove userId from interested_users.
+    // Remove userId from interested_users for a Trip object in Firebase.
+    // Remove tripId from interested_trips for a User object in Firebase.
     ref.child("trips").child(tripId).once("value", function(dataSnapshot) {
       var trip = dataSnapshot.val();
       
@@ -152,6 +181,18 @@ $(document).ready(function() {
       ref.child("trips").child(tripId).update({
         interested_users: updated_interested_users,
       });
+
+      var interested_trips = current_user.interested_trips.split(", ");
+      var updated_interested_trips = [];
+      interested_trips.forEach(function(tid, i) {
+        if (tid != tripId) updated_interested_trips.push(tid);
+      });
+      updated_interested_trips = updated_interested_trips.join(", ");
+
+      ref.child("users").child(userId).update({
+        interested_trips: updated_interested_trips,
+      });
+
       document.location.href = "profile.html?uid="+userId+"&reject_feedback=true";
     })
   });

@@ -95,21 +95,35 @@
                                 </div>        
                             </div> 
                         </a>          
-                        <div class="col-xs-12 col-sm-12 col-md-2 right">
-                            <!-- <div class="interested_users">
-                              <p class='text-center'><a href="interested_users.html?trip_index={{index}}">See Interested Users</a></p>
-                            </div> -->
+                        <div class="col-xs-12 col-sm-12 col-md-3 right">
                             <div class="interested_users">
-                                <h4>Interested Users:</h4>
+                                {{#if interested_users}}
+                                    <h4>Interested Users:</h4>
+                                {{else}}
+                                    <i>No interested users.</i>
+                                {{/if}}
                                 <ul>
                                     {{#each interested_users}}
                                         <li>
-                                            <a href="profile.html?uid={{this.uid}}">{{this.first_name}}</a>
-                                            <!-- <a class="thumbnail" href="#" data-toggle="modal" data-target="#user-modal{{index}}"><img alt="" src={{this.photo}}></a> -->
+                                            <a href="profile.html?uid={{this.uid}}&tripid={{this.tripid}}">{{this.first_name}}</a>
                                         </li>
                                     {{/each}}           
                                 </ul>
-                            <div>                                
+                            <div>
+                            <div class="companions">
+                                {{#if companions}}
+                                    <h4>Companions:</h4>
+                                {{else}}
+                                    <i>No companions.</i>
+                                {{/if}}
+                                <ul>
+                                    {{#each companions}}
+                                        <li>
+                                            <a href="profile.html?uid={{this.uid}}">{{this.first_name}}</a>
+                                        </li>
+                                    {{/each}}           
+                                </ul>
+                            <div>                                       
 
                         </div>
                         <span class="clearfix borda"></span>         

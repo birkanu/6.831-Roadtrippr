@@ -79,7 +79,8 @@ $(document).ready(function() {
 						six_things: '',
 						best_places: '',
 						trips: '',
-						interested_trips: ''
+						interested_trips: '',
+						companioned_trips: ''
 					});
 					$(".signupSuccessMessage").show();
 					$('#login-modal').modal('show');
