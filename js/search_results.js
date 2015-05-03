@@ -176,6 +176,7 @@ $(document).ready(function() {
 
         // Link the date pickers 
         var start_date = search_parameters.start_date;
+        $('#search-end-date').data("DateTimePicker").minDate(moment(start_date));
         $("#search-start-date").on("dp.change", function (e) {
             if (e.date) {
                 start_date = e.date;
@@ -183,6 +184,7 @@ $(document).ready(function() {
             }
         });
         var end_date = search_parameters.end_date;
+        $('#search-start-date').data("DateTimePicker").maxDate(moment(end_date));        
         $("#search-end-date").on("dp.change", function (e) {
             if (e.date) {
                 end_date = e.date;
