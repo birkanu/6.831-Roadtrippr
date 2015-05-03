@@ -1,3 +1,15 @@
+function get_map_img_src(stops) {
+    var map_img_src = "http://maps.googleapis.com/maps/api/staticmap?scale=1&size=275x140&maptype=roadmap&format=png&visual_refresh=true";
+    var markers = "";
+    for (var i = 0; i < stops.length; i++) {
+        var stop = stops[i];
+        var markerLocation = "&markers=size:mid%7Ccolor:red%7C" + stop.lat + "," + stop.lng;
+        markers += markerLocation;
+    }
+    map_img_src += markers;
+    return map_img_src;
+}
+
 var performSearch = function(ref, search_parameters, search_result_excludes) {
     var search_results = [];
     var trips_ref = ref.child("trips");
@@ -61,7 +73,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                 duration: cur_trip_json.duration,
                 num_companions: cur_trip_json.companion_count,
                 are_dates_flexible: cur_trip_json.are_dates_flexible,
-                map_img_src: "http://dishaan.scripts.mit.edu/map-" + i + ".png",
+                map_img_src: get_map_img_src(cur_trip_json.stops),
                 creator_img_src: "http://dishaan.scripts.mit.edu/creator-" + i + ".png",
                 creator_id: cur_user.index,
                 creator_name: cur_user.first_name,
