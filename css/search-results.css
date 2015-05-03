@@ -92,6 +92,7 @@ div h1 {
 }
 
 .full_route {
+    display: none;
     position: absolute;
     z-index: 5;
     background-color: white;

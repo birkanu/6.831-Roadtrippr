@@ -38,13 +38,15 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                 if (search_parameters.end_location) {
                     if (cur_matched_trip.stops[cur_matched_trip.stops.length-1].place_id == search_parameters.end_location.place_id) {
                         if (!search_result_excludes) {
+                            cur_matched_trip["id"] = data.key();
                             search_results.push(cur_matched_trip);
                             return;
                         }
                         // console.log(data.key());
                         // console.log(search_result_excludes.split(', '));
                         // console.log(search_result_excludes.split(', ').indexOf(data.key().toString()) > -1);
-                        if (search_result_excludes.split(', ').indexOf(data.key().toString()) == -1) {
+                        if (true){ //search_result_excludes.split(', ').indexOf(data.key().toString()) > -1) {
+                            cur_matched_trip["id"] = data.key();
                             search_results.push(cur_matched_trip);
                         }
                     }
@@ -54,18 +56,18 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
 
         var trip_dict = {};
 
-        for (var i = 0; i < search_results.length; i++) {
-            cur_trip_json = search_results[i];
-            cur_trip_stop_names = [];
-            users_ref = ref.child("users");
-            var cur_user;
+        //for (var i = 0; i < search_results.length; i++) {                        
+        search_results.forEach(function(cur_trip_json) {
+            var i = cur_trip_json.id;
             ref.child("users").child(cur_trip_json.creator_id).once('value', function(dataSnapshot) {
-                cur_user = dataSnapshot.val();           
+                cur_trip_stop_names = [];                
+                var cur_user = dataSnapshot.val();           
 
                 for (var s = 0; s < cur_trip_json.stops.length; s++) {
                     cur_trip_stop_names.push(cur_trip_json.stops[s].name);
                 }
                 trip = {
+                    id_only: i,
                     trip_id: "trip_" +i,
                     full_route_id: "full_route_"+i,
                     abbr_route_id: "abbr_route_"+i,
@@ -92,15 +94,21 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                 var search_result_source_processed = search_result_template(search_result_context);
                 $("#search_results").html(search_result_source_processed);    
                 $(".search-result").show();
-                fix_link(i);
-                if (trip.planned_full_route.length > 3) {
-                    add_hover(i);                    
-                } else {
-                    $("#full_route_"+i).toggle();
+                for (var ctxCtr = 0; ctxCtr < search_result_context.trips.length; ctxCtr++) {
+                    var cur_i = search_result_context.trips[ctxCtr].id_only;
+                    $("#trip_"+cur_i).click(function(e) {
+                        var clicked_trip = trip_dict[this.id];
+                        localStorage.setItem('trip', JSON.stringify(clicked_trip));
+                        this.href = "trip-details.html";
+                        document.location.href = "trip-details.html";            
+                    });
+                    if (search_result_context.trips[ctxCtr].planned_full_route.length > 3) {
+                        add_hover(cur_i);                    
+                    }                     
                 }
 
             }); 
-        }
+        });
     
 
         //for (var t = 0; t < search_result_context.trips.length; t++) {
@@ -117,12 +125,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
         //for (var j = 0; j < search_result_context.trips.length; j++) {
         function add_hover(j) {
             var full_route_div = $("#full_route_"+j);
-            var abbr_route_div = $("#abbr_route_"+j);
-            // full_route_div.offset({left: full_route_div.offset().left, top: abbr_route_div.offset().top});
-            full_route_div.toggle();
-            // if (search_result_context.trips[j].planned_full_route.length <= 3) {
-            //     return;
-            // }            
+            var abbr_route_div = $("#abbr_route_"+j);          
             abbr_route_div.mouseenter(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
