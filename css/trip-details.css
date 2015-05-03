@@ -137,3 +137,8 @@ body {
   position: relative;
   float: right;
 }  
+
+.creator_img {
+  width: 128px;
+  height: 128px;
+}
