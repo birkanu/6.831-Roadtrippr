@@ -60,11 +60,13 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
         search_results.forEach(function(cur_trip_json) {
             var i = cur_trip_json.id;
             ref.child("users").child(cur_trip_json.creator_id).once('value', function(dataSnapshot) {
-                cur_trip_stop_names = [];                
+                cur_trip_stop_names = [];           
+                cur_trip_stops_latlng = [];     
                 var cur_user = dataSnapshot.val();           
 
                 for (var s = 0; s < cur_trip_json.stops.length; s++) {
                     cur_trip_stop_names.push(cur_trip_json.stops[s].name);
+                    cur_trip_stops_latlng.push({'lat': cur_trip_json.stops[s].lat, 'lng': cur_trip_json.stops[s].lng});
                 }
                 trip = {
                     id_only: i,
@@ -74,6 +76,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                     trip_name: cur_trip_json.name,
                     planned_abbr_route: (cur_trip_stop_names.length <= 3) ? cur_trip_stop_names : [cur_trip_json.stops[0].name].concat([cur_trip_json.stops[1].name]).concat("...").concat([cur_trip_json.stops[cur_trip_json.stops.length - 1].name]),
                     planned_full_route: cur_trip_stop_names,
+                    planned_full_latlng: cur_trip_stops_latlng,
                     start_date: cur_trip_json.start_date,
                     end_date: cur_trip_json.end_date,
                     duration: cur_trip_json.duration,
@@ -161,7 +164,7 @@ $(document).ready(function() {
             // $("#user-menu").html(user_menu_source_processed);
         });
     } else {
-        document.location.href = "index.html";
+        document.location.href = "../index.html";
     }    
 
     var showPage = function() {
