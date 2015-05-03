@@ -137,3 +137,8 @@ a {
   color: #fff;
   cursor: default;
 }
+
+.creator_img {
+    width: 128px;
+    height: 128px;
+}

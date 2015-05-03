@@ -57,39 +57,54 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
         for (var i = 0; i < search_results.length; i++) {
             cur_trip_json = search_results[i];
             cur_trip_stop_names = [];
-            cur_user = users[i];
-            for (var s = 0; s < cur_trip_json.stops.length; s++) {
-                cur_trip_stop_names.push(cur_trip_json.stops[s].name);
-            }
-            trip = {
-                trip_id: "trip_" +i,
-                full_route_id: "full_route_"+i,
-                abbr_route_id: "abbr_route_"+i,
-                trip_name: cur_trip_json.name,
-                planned_abbr_route: (cur_trip_stop_names.length <= 3) ? cur_trip_stop_names : [cur_trip_json.stops[0].name].concat([cur_trip_json.stops[1].name]).concat("...").concat([cur_trip_json.stops[cur_trip_json.stops.length - 1].name]),
-                planned_full_route: cur_trip_stop_names,
-                start_date: cur_trip_json.start_date,
-                end_date: cur_trip_json.end_date,
-                duration: cur_trip_json.duration,
-                num_companions: cur_trip_json.companion_count,
-                are_dates_flexible: cur_trip_json.are_dates_flexible,
-                map_img_src: get_map_img_src(cur_trip_json.stops),
-                creator_img_src: "http://dishaan.scripts.mit.edu/creator-" + i + ".png",
-                creator_id: cur_user.index,
-                creator_name: cur_user.first_name,
-                creator_age: cur_user.age,
-                creator_location:  cur_user.city,
-                notes: cur_trip_json.notes,
-                map_alt_text: "Route map from " + cur_trip_json.start_location + " to " + cur_trip_json.end_location,
-            }
-            search_result_context.trips.push(trip);
-            trip_dict["trip_"+i] = trip;
+            users_ref = ref.child("users");
+            var cur_user;
+            ref.child("users").child(cur_trip_json.creator_id).once('value', function(dataSnapshot) {
+                cur_user = dataSnapshot.val();           
+
+                for (var s = 0; s < cur_trip_json.stops.length; s++) {
+                    cur_trip_stop_names.push(cur_trip_json.stops[s].name);
+                }
+                trip = {
+                    trip_id: "trip_" +i,
+                    full_route_id: "full_route_"+i,
+                    abbr_route_id: "abbr_route_"+i,
+                    trip_name: cur_trip_json.name,
+                    planned_abbr_route: (cur_trip_stop_names.length <= 3) ? cur_trip_stop_names : [cur_trip_json.stops[0].name].concat([cur_trip_json.stops[1].name]).concat("...").concat([cur_trip_json.stops[cur_trip_json.stops.length - 1].name]),
+                    planned_full_route: cur_trip_stop_names,
+                    start_date: cur_trip_json.start_date,
+                    end_date: cur_trip_json.end_date,
+                    duration: cur_trip_json.duration,
+                    num_companions: cur_trip_json.companion_count,
+                    are_dates_flexible: cur_trip_json.are_dates_flexible,
+                    map_img_src: get_map_img_src(cur_trip_json.stops),
+                    creator_img_src: cur_user.photo,
+                    creator_id: cur_user.index,
+                    creator_name: cur_user.first_name,
+                    creator_age: cur_user.age,
+                    creator_location:  cur_user.city,
+                    notes: cur_trip_json.notes,
+                    map_alt_text: "Route map from " + cur_trip_json.start_location + " to " + cur_trip_json.end_location,
+                }
+                search_result_context.trips.push(trip);
+                trip_dict["trip_"+i] = trip;                
+
+                var search_result_source_processed = search_result_template(search_result_context);
+                $("#search_results").html(search_result_source_processed);    
+                $(".search-result").show();
+                fix_link(i);
+                if (trip.planned_full_route.length > 3) {
+                    add_hover(i);                    
+                } else {
+                    $("#full_route_"+i).toggle();
+                }
+
+            }); 
         }
+    
 
-        var search_result_source_processed = search_result_template(search_result_context);
-        $("#search_results").html(search_result_source_processed);        
-
-        for (var t = 0; t < search_result_context.trips.length; t++) {
+        //for (var t = 0; t < search_result_context.trips.length; t++) {
+        function fix_link(t) {
             $("#trip_"+t).click(function(e) {
                 var clicked_trip = trip_dict[this.id];
                 localStorage.setItem('trip', JSON.stringify(clicked_trip));
@@ -99,14 +114,15 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
         }
 
         // Add hover on abbreviated planned route for each route
-        for (var j = 0; j < search_result_context.trips.length; j++) {
+        //for (var j = 0; j < search_result_context.trips.length; j++) {
+        function add_hover(j) {
             var full_route_div = $("#full_route_"+j);
             var abbr_route_div = $("#abbr_route_"+j);
             // full_route_div.offset({left: full_route_div.offset().left, top: abbr_route_div.offset().top});
             full_route_div.toggle();
-            if (search_result_context.trips[j].planned_full_route.length <= 3) {
-                continue;
-            }            
+            // if (search_result_context.trips[j].planned_full_route.length <= 3) {
+            //     return;
+            // }            
             abbr_route_div.mouseenter(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
