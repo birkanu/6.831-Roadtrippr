@@ -135,6 +135,10 @@ $(document).ready(function() {
     if (authData) {
         ref.child("users").child(authData.uid).once('value', function(dataSnapshot) {
             current_user = dataSnapshot.val();
+            var user_menu_source = $("#user-menu").html();
+            var user_menu_template = Handlebars.compile(user_menu_source);
+            var user_menu_source_processed = user_menu_template ({name: current_user.first_name});
+            $("#user-menu").html(user_menu_source_processed);            
             search_result_excludes = current_user.trips;
             showPage();
             // var user_menu_source = $("#user-menu").html();
