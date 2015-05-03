@@ -52,7 +52,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                 full_route_id: "full_route_"+i,
                 abbr_route_id: "abbr_route_"+i,
                 trip_name: cur_trip_json.name,
-                planned_abbr_route: [cur_trip_json.stops[0].name].concat([cur_trip_json.stops[1].name]).concat("...").concat([cur_trip_json.stops[cur_trip_json.stops.length - 1].name]),
+                planned_abbr_route: (cur_trip_stop_names.length <= 3) ? cur_trip_stop_names : [cur_trip_json.stops[0].name].concat([cur_trip_json.stops[1].name]).concat("...").concat([cur_trip_json.stops[cur_trip_json.stops.length - 1].name]),
                 planned_full_route: cur_trip_stop_names,
                 start_date: cur_trip_json.start_date,
                 end_date: cur_trip_json.end_date,
@@ -75,7 +75,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
         var search_result_source_processed = search_result_template(search_result_context);
         $("#search_results").html(search_result_source_processed);        
 
-        for (var t = 0; t < road_trips.length; t++) {
+        for (var t = 0; t < search_result_context.trips.length; t++) {
             $("#trip_"+t).click(function(e) {
                 var clicked_trip = trip_dict[this.id];
                 localStorage.setItem('trip', JSON.stringify(clicked_trip));
@@ -90,6 +90,9 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
             var abbr_route_div = $("#abbr_route_"+j);
             // full_route_div.offset({left: full_route_div.offset().left, top: abbr_route_div.offset().top});
             full_route_div.toggle();
+            if (search_result_context.trips[j].planned_full_route.length <= 3) {
+                continue;
+            }            
             abbr_route_div.mouseenter(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
