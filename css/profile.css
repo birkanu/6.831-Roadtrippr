@@ -6,6 +6,11 @@
   padding-left: 20px;
 }
 
+.navbar-inverse .navbar-brand {
+  color: #fff;
+  cursor: default;
+}
+
 div .text-left {
   border: 1px solid black;
   padding-bottom: 20px;
