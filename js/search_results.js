@@ -25,12 +25,14 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                 (cur_matched_trip.stops[0].place_id == search_parameters.start_location.place_id)) {
                 if (search_parameters.end_location) {
                     if (cur_matched_trip.stops[cur_matched_trip.stops.length-1].place_id == search_parameters.end_location.place_id) {
-                        console.log(data.key());
                         if (!search_result_excludes) {
                             search_results.push(cur_matched_trip);
                             return;
                         }
-                        if (!(data.key() in search_result_excludes.split(', '))) {
+                        // console.log(data.key());
+                        // console.log(search_result_excludes.split(', '));
+                        // console.log(search_result_excludes.split(', ').indexOf(data.key().toString()) > -1);
+                        if (search_result_excludes.split(', ').indexOf(data.key().toString()) == -1) {
                             search_results.push(cur_matched_trip);
                         }
                     }
