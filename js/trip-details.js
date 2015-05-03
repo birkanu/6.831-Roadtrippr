@@ -19,6 +19,7 @@ $(document).ready(function() {
     clicked_trip_details.creator_age = clicked_trip.creator_age;
     clicked_trip_details.creator_location = clicked_trip.creator_location;
     clicked_trip_details.creator_img_src = clicked_trip.creator_img_src;   
+    clicked_trip_details.creator_email = clicked_trip.creator_email; 
 
 
     // Render the HTML for the trip details
