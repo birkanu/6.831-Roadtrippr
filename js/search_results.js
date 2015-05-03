@@ -96,12 +96,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                 $(".search-result").show();
                 for (var ctxCtr = 0; ctxCtr < search_result_context.trips.length; ctxCtr++) {
                     var cur_i = search_result_context.trips[ctxCtr].id_only;
-                    $("#trip_"+cur_i).click(function(e) {
-                        var clicked_trip = trip_dict[this.id];
-                        localStorage.setItem('trip', JSON.stringify(clicked_trip));
-                        this.href = "trip-details.html";
-                        document.location.href = "trip-details.html";            
-                    });
+                    fix_link(cur_i);
                     if (search_result_context.trips[ctxCtr].planned_full_route.length > 3) {
                         add_hover(cur_i);                    
                     }                     
