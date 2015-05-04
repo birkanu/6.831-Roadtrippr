@@ -76,6 +76,21 @@
               <h3 class="profile-info">Best Places I've Been To: </h3><span class="profile-info" id="best-places">{{best_places}}</span>
             </div>
             <br>
+            <div class="text-left" id="interested-trips">
+              {{#if interested_trips}}
+                <h3 class="profile-info">Trips Which You're Interested In Joining: </h3>
+              {{else}}
+                <h3 class="profile-info"><i>There are no trips which you're interested in joining.</i></h3>
+              {{/if}}
+              <ul>
+                {{#each interested_trips}}
+                  <li>
+                    <a href="#" class="trip-link" id="{{id_only}}">{{name}}</a>
+                  </li>
+                {{/each}}           
+              </ul>
+            </div>
+            <br>
             <div class="text-left" id="companioned-trips">
               {{#if companioned_trips}}
                 <h3 class="profile-info">Trips In Which You're A Companion: </h3>
