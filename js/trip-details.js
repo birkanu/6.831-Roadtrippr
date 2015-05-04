@@ -56,26 +56,40 @@ $(document).ready(function() {
             e.preventDefault();
             e.stopPropagation();
             var req_trips = [];
-            if (current_user.requested_trips) {
-                for (var t = 0; t < current_user.requested_trips.length; t++) {
-                    if (current_user.requested_trips[t] != clicked_trip_details.trip_id) {
-                        req_trips.push(current_user.requested_trips[t]);
+            if (current_user.interested_trips) {
+                var interested_trips = current_user.interested_trips.split(', ');
+                for (var t = 0; t < interested_trips.length; t++) {
+                    if (interested_trips[t] != clicked_trip_details.trip_id) {
+                        req_trips.push(interested_trips[t]);
                     }
                 }                
             }
-            ref.child("users").child(authData.uid).update({'requested_trips': req_trips}, function(data) {
+            ref.child("users").child(authData.uid).update({'interested_trips': buildString(req_trips)}, function(data) {
                 set_req_trip_button(req_trips);
             });  
         }
 
         set_req_trip_button();
 
+        function buildString(trip_list) {
+            var trip_string = "";
+            for (var tl = 0; tl < trip_list.length; tl++) {
+                if (trip_list[tl] == "") {
+                    continue;
+                }
+                trip_string += trip_list[tl];
+                if (tl != trip_list.length -1) {
+                    trip_string += ", ";
+                }
+            }
+            return trip_string;
+        }
+
         function set_req_trip_button(req_trips) {
             if (!req_trips) {
-                req_trips = current_user.requested_trips;
+                req_trips = current_user.interested_trips.split(', ');
             }
-            if (req_trips) {
-                console
+            if (req_trips.length != 0) {
                 if (req_trips.indexOf(clicked_trip_details.trip_id) > -1) {
                     $("#join-button-link").html("WITHDRAW REQUEST");
                     $("#join-button").click(withdrawListener);
@@ -95,28 +109,28 @@ $(document).ready(function() {
                         } else {
                             new_req_trips = req_trips.concat(clicked_trip_details.trip_id);   
                         }
-                        ref.child("users").child(authData.uid).update({'requested_trips': new_req_trips}, function(data) {
+                        ref.child("users").child(authData.uid).update({'interested_trips': buildString(new_req_trips)}, function(data) {
                             $("#join-button-link").html("WITHDRAW REQUEST");
                             $("#join-button").on('click', withdrawListener);                                                        
                         });
                     });
                 }
             } else {
-                    $("#join-button-link").html("REQUEST TO JOIN TRIP");
-                    $("#join-button").click(function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        var new_req_trips = [clicked_trip_details.trip_id];
-                        ref.child("users").child(authData.uid).update({'requested_trips': new_req_trips}, function(data) {
-                            $(".success").html("Success");
-                            $(".success").fadeIn(500);
-                            setTimeout(function() {
-                                $(".success").fadeOut(500);
-                            }, 1000);
-                            $("#join-button-link").html("WITHDRAW REQUEST");
-                            $("#join-button").on('click', withdrawListener);                            
-                        });
-                    });            
+                $("#join-button-link").html("REQUEST TO JOIN TRIP");
+                $("#join-button").click(function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var new_req_trips = [clicked_trip_details.trip_id];
+                    ref.child("users").child(authData.uid).update({'interested_trips': clicked_trip_details.trip_id}, function(data) {
+                        $(".success").html("Success");
+                        $(".success").fadeIn(500);
+                        setTimeout(function() {
+                            $(".success").fadeOut(500);
+                        }, 1000);
+                        $("#join-button-link").html("WITHDRAW REQUEST");
+                        $("#join-button").on('click', withdrawListener);                            
+                    });
+                });            
             }            
         }
 
