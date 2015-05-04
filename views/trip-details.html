@@ -61,6 +61,8 @@
     <div class="site-wrapper">
       <div class="row">
         <div class="col-md-4">
+          <div id="success_message" class="success">
+          </div>
           <div id="trip-details">
             <p class="lead text-center trip-name">{{name}}</p>
             <hr>
@@ -69,10 +71,11 @@
                   <img class="creator_img" src={{this.creator_img_src}} />
               </div>
               <div class="user_data">
-                  <h4 class="">{{this.creator_first_name}}</h4>
+                  <h4 class=""><a href="profile.html?uid={{this.creator_id}}">{{this.creator_first_name}}</a></h4>
                   <p class="">{{this.creator_age}}</p>
                   <p class="">{{this.creator_location}}</p>
                   <button type="button" class="label label-warning" id="email-button"><a href="mailto:{{this.creator_email}}" style='color:inherit; text-decoration:none'>EMAIL</a></button>
+                  <button type="button" class="label label-warning" id="join-button"><a href="" style='color:inherit; text-decoration:none' id="join-button-link"></a></button>
               </div>
             </div>
             <hr>

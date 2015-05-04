@@ -45,7 +45,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                         // console.log(data.key());
                         // console.log(search_result_excludes.split(', '));
                         // console.log(search_result_excludes.split(', ').indexOf(data.key().toString()) > -1);
-                        if (search_result_excludes.split(', ').indexOf(data.key().toString()) == -1) {
+                        if (true) {//search_result_excludes.split(', ').indexOf(data.key().toString()) == -1) {
                             cur_matched_trip["id"] = data.key();
                             search_results.push(cur_matched_trip);
                         }
