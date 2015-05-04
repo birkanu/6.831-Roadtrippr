@@ -33,7 +33,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
     trips_ref.orderByChild("start_ts").startAt(start_date_search_by).on("value", function(start_date_snapshot) {
         start_date_snapshot.forEach(function(data) {
             var cur_matched_trip = data.val();
-            if ((cur_matched_trip.end_ts < end_date_search_by) &&
+            if (cur_matched_trip.end_ts < end_date_search_by &&
                 (cur_matched_trip.stops[0].place_id == search_parameters.start_location.place_id)) {
                 if (search_parameters.end_location) {
                     if (cur_matched_trip.stops[cur_matched_trip.stops.length-1].place_id == search_parameters.end_location.place_id) {
@@ -55,6 +55,15 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
         });
 
         var trip_dict = {};
+
+        if (search_results.length == 0) {
+            $("#noTripsMessage").show();
+            $("#search_results").hide();
+            return;
+        }
+
+        $("#search_results").show();
+        $("#noTripsMessage").hide();
 
         search_results.forEach(function(cur_trip_json) {
             var i = cur_trip_json.id;
