@@ -77,6 +77,7 @@ $(document).ready(function() {
                 trip.creator_location = trip_creator.city;
                 trip.creator_img_src = trip_creator.photo;   
                 trip.creator_email = trip_creator.email; 
+                trip.trip_name = trip.name;
 
                 var cur_trip_stop_names = [];           
                 var cur_trip_stops_latlng = [];     
@@ -98,7 +99,7 @@ $(document).ready(function() {
                   $(".trip-link").click(function() {
                     var trip_id = $($(this)[0]).attr("id");
                     var clicked_trip = companioned_trips_map[trip_id];
-                  
+                    console.log(clicked_trip);
                     localStorage.setItem('trip', JSON.stringify(clicked_trip));
                     this.href = "trip-details.html";
                     document.location.href = "trip-details.html";  
