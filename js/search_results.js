@@ -155,6 +155,10 @@ $(document).ready(function() {
     var ref = new Firebase("https://shining-fire-2402.firebaseio.com");
 
     var current_user;
+    $(document.body).on('click', '#logout', function() {
+        ref.unauth();
+        document.location.href = "../index.html";
+    });    
     var search_result_excludes;
     var authData = ref.getAuth();
     if (authData) {

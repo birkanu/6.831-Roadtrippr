@@ -159,12 +159,13 @@ a {
 }
 
 .success {
-  background: green;
-  color: white;
+  background: #99FF66;
+  color: green;
   font-size: 17px;
   text-align: center;
   display: none;
   width: 100%;
   margin-top: 20px;
   z-index: 1000000;
+  border: 1px dotted #ccc;
 }
