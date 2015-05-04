@@ -86,6 +86,11 @@ $(document).ready(function() {
         }
 
         function set_req_trip_button(req_trips) {
+            if (current_user.companioned_trips && current_user.companioned_trips.split(', ').indexOf(clicked_trip_details.trip_id) > -1) {
+                $("#join-button").hide();
+                return;
+            }
+
             if (!req_trips) {
                 req_trips = current_user.interested_trips.split(', ');
             }

@@ -121,7 +121,6 @@ body {
 .modal-open .modal {
   padding-left: 0px !important;
   padding-right: 0px !important;
-  overflow-y: scroll;
 }
 
 .form-inline .form-group {
