@@ -58,26 +58,35 @@ $(document).ready(function() {
         var user_menu_source_processed = user_menu_template({name: current_user.first_name}); // Set name for nav bar.
         $("#user-menu").html(user_menu_source_processed);
 
+        // Add interested trips to profile.
+        var interested_trips = [];
+        var interested_trips_ids = current_user.interested_trips.split(", ");
+        if (interested_trips_ids[0] == "") interested_trips_ids = [];
+
         // Add companioned trips to profile.
-        var companioned_trips_map = {};
         var companioned_trips = [];
         var companioned_trips_ids = current_user.companioned_trips.split(", ");
         if (companioned_trips_ids[0] == "") companioned_trips_ids = [];
 
-        if (companioned_trips_ids.length > 0) {
-          companioned_trips_ids.forEach(function(tid, i) {
+        var combined_trips_ids = interested_trips_ids.concat(companioned_trips_ids);
+        var trip_map = {};
+
+        if (combined_trips_ids.length > 0) {
+          combined_trips_ids.forEach(function(tid, i) {
             ref.child("trips").child(tid).once('value', function(dataSnapshot) {
               var trip = dataSnapshot.val();
               trip.id_only = tid;
 
               ref.child("users").child(trip["creator_id"]).once('value', function(dataSnapshot) {
                 var trip_creator = dataSnapshot.val();
+
                 trip.creator_name = trip_creator.first_name;
                 trip.creator_age = trip_creator.age;
                 trip.creator_location = trip_creator.city;
                 trip.creator_img_src = trip_creator.photo;   
                 trip.creator_email = trip_creator.email; 
                 trip.trip_name = trip.name;
+                trip.num_companions = trip.companion_count;
 
                 var cur_trip_stop_names = [];           
                 var cur_trip_stops_latlng = [];     
@@ -88,18 +97,23 @@ $(document).ready(function() {
                 trip.planned_full_latlng = cur_trip_stops_latlng;
                 trip.planned_full_route = cur_trip_stop_names;
 
-                companioned_trips.push(trip);
-                companioned_trips_map[tid] = trip;
+                if (interested_trips.length < interested_trips_ids.length) {
+                  interested_trips.push(trip);
+                } else {
+                  companioned_trips.push(trip);
+                }
 
-                if (companioned_trips.length == companioned_trips_ids.length) {
-                  current_user["companioned_trips"] = companioned_trips;
+                trip_map[tid] = trip;
+
+                if (interested_trips.length + companioned_trips.length == combined_trips_ids.length) {
+                  current_user.interested_trips = interested_trips;
+                  current_user.companioned_trips = companioned_trips;
                   $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
 
                   // Direct to the correct trip-details page when clicking on a trip in which you're on a companion.
                   $(".trip-link").click(function() {
                     var trip_id = $($(this)[0]).attr("id");
-                    var clicked_trip = companioned_trips_map[trip_id];
-                    console.log(clicked_trip);
+                    var clicked_trip = trip_map[trip_id];
                     localStorage.setItem('trip', JSON.stringify(clicked_trip));
                     this.href = "trip-details.html";
                     document.location.href = "trip-details.html";  
@@ -150,6 +164,7 @@ $(document).ready(function() {
           $("#user-menu").html(user_menu_source_processed);
           $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
           $("#btn-edit-profile-details").hide(); 
+          $("#interested-trips").hide();  // Don't show other users' interested trips.
           $("#companioned-trips").hide(); // Don't show other users' companioned trips.
           // If there's a trip id parameter passed in, then we're looking at an interested user whom we have to accept or reject for the trip.
           if (tripId) {
@@ -166,7 +181,7 @@ $(document).ready(function() {
         $("#accept-feedback").show();
       }
 
-      // Coming from the action where you reject a user as to be a com
+      // Coming from the action where you reject a user as to be a companion.
       if (getQueryVariable("reject_feedback")) {
         $("#accept-button").hide();
         $("#reject-button").hide();
@@ -174,8 +189,7 @@ $(document).ready(function() {
       }
 
       // If this is a new user, prompt him/her to edit profile.
-      var edit_profile = getQueryVariable("edit-profile");
-      if (edit_profile) {
+      if (getQueryVariable("edit-profile")) {
         $("#edit-profile-reminder").show();
         $("#profile-details, #edit-profile-container").toggle();  // Show the edit profile form.
         $('#btn-edit-profile-details').hide();
