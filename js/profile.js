@@ -70,6 +70,7 @@ $(document).ready(function() {
               trip["tid"] = tid;
               companioned_trips.push(trip);
               if (companioned_trips.length == companioned_trips_ids.length) {
+                console.log('done');
                 current_user["companioned_trips"] = companioned_trips;
                 $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
 
@@ -111,17 +112,19 @@ $(document).ready(function() {
         }
       } 
       else {
+        // Viewing another person's profile. No need for profile edit validation.
         ref.child("users").child(authData.uid).once('value', function(dataSnapshot) {
           var user_menu_source_processed = user_menu_template({name: dataSnapshot.val().first_name}); // Set name for nav bar.
           $("#user-menu").html(user_menu_source_processed);
-          $("#btn-edit-profile-details").hide();
+          $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
+          $("#btn-edit-profile-details").hide(); 
+          $("#companioned-trips").hide(); // Don't show other users' companioned trips.
+          // If there's a trip id parameter passed in, then we're looking at an interested user whom we have to accept or reject for the trip.
+          if (tripId) {
+            $("#accept-button").show();
+            $("#reject-button").show();
+          }
         })
-      }
-
-      // If there's a trip id parameter passed in, then we're looking at an interested user whom we have to accept or reject for the trip.
-      if (tripId) {
-        $("#accept-button").show();
-        $("#reject-button").show();
       }
 
       // Coming from the action where you accept a user as a companion for a trip.
