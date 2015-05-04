@@ -6,6 +6,7 @@ body {
 }
 
 .site-wrapper {
+  margin-top: 50px;
   height: 100%; 
 }
 
@@ -141,4 +142,9 @@ body {
 .creator_img {
   width: 128px;
   height: 128px;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #fff;
+  cursor: default;
 }
