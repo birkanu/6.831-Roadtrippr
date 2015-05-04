@@ -56,15 +56,16 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
 
         var trip_dict = {};
 
-        //for (var i = 0; i < search_results.length; i++) {                        
         search_results.forEach(function(cur_trip_json) {
             var i = cur_trip_json.id;
             ref.child("users").child(cur_trip_json.creator_id).once('value', function(dataSnapshot) {
-                cur_trip_stop_names = [];                
+                cur_trip_stop_names = [];           
+                cur_trip_stops_latlng = [];     
                 var cur_user = dataSnapshot.val();           
 
                 for (var s = 0; s < cur_trip_json.stops.length; s++) {
                     cur_trip_stop_names.push(cur_trip_json.stops[s].name);
+                    cur_trip_stops_latlng.push({'lat': cur_trip_json.stops[s].lat, 'lng': cur_trip_json.stops[s].lng});
                 }
                 trip = {
                     id_only: i,
@@ -74,6 +75,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                     trip_name: cur_trip_json.name,
                     planned_abbr_route: (cur_trip_stop_names.length <= 3) ? cur_trip_stop_names : [cur_trip_json.stops[0].name].concat([cur_trip_json.stops[1].name]).concat("...").concat([cur_trip_json.stops[cur_trip_json.stops.length - 1].name]),
                     planned_full_route: cur_trip_stop_names,
+                    planned_full_latlng: cur_trip_stops_latlng,
                     start_date: cur_trip_json.start_date,
                     end_date: cur_trip_json.end_date,
                     duration: cur_trip_json.duration,
@@ -81,7 +83,8 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                     are_dates_flexible: cur_trip_json.are_dates_flexible,
                     map_img_src: get_map_img_src(cur_trip_json.stops),
                     creator_img_src: cur_user.photo,
-                    creator_id: cur_user.index,
+                    creator_email: cur_user.email,
+                    creator_id: dataSnapshot.key(),
                     creator_name: cur_user.first_name,
                     creator_age: cur_user.age,
                     creator_location:  cur_user.city,
@@ -117,7 +120,6 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
         }
 
         // Add hover on abbreviated planned route for each route
-        //for (var j = 0; j < search_result_context.trips.length; j++) {
         function add_hover(j) {
             var full_route_div = $("#full_route_"+j);
             var abbr_route_div = $("#abbr_route_"+j);          
@@ -161,7 +163,7 @@ $(document).ready(function() {
             // $("#user-menu").html(user_menu_source_processed);
         });
     } else {
-        document.location.href = "index.html";
+        document.location.href = "../index.html";
     }    
 
     var showPage = function() {
@@ -221,6 +223,10 @@ $(document).ready(function() {
                 $('#search-start-date').data("DateTimePicker").maxDate(e.date);
             }
         });  
+
+        $('.glyphicon-calendar').click(function() {
+            $(this).parent().parent().find('.form-control').data("DateTimePicker").show();
+        });        
 
         performSearch(ref, search_parameters, search_result_excludes);
 

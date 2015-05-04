@@ -6,6 +6,7 @@ body {
 }
 
 .site-wrapper {
+  margin-top: 50px;
   height: 100%; 
 }
 
@@ -125,7 +126,7 @@ body {
 .user_data {
   position: absolute;
   left: 40%;
-  top: 10%;
+  top: 0%;
 }
 
 .col-md-4 {
@@ -141,4 +142,9 @@ body {
 .creator_img {
   width: 128px;
   height: 128px;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #fff;
+  cursor: default;
 }
