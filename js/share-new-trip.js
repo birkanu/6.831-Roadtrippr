@@ -25,6 +25,7 @@ $(document).ready(function() {
 	// Get the New Trip object.
 	var new_trip = JSON.parse(localStorage.getItem('new_trip'));
 	var new_trip_details = {};
+	new_trip_details.creator_id = current_user_uid;
 	new_trip_details.name = new_trip.start_location.formatted_address.substring(0, new_trip.start_location.formatted_address.indexOf(',')) + 
 	'-' + new_trip.end_location.formatted_address.substring(0, new_trip.end_location.formatted_address.indexOf(',')) + ' Trip';
 	new_trip_details.start_date = moment(new_trip.start_date).format("MMMM DD, YYYY");

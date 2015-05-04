@@ -1,5 +1,9 @@
 .container { 
-    margin-top: 20px; 
+    margin-top: 70px; 
+}
+
+.container a {
+    color: #000 !important;
 }
 
 .heading {
@@ -88,6 +92,7 @@ div h1 {
 }
 
 .full_route {
+    display: none;
     position: absolute;
     z-index: 5;
     background-color: white;
@@ -126,5 +131,15 @@ div h1 {
 }
 
 a {
-    color: black !important;
+    color: #ccc;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #fff;
+  cursor: default;
+}
+
+.creator_img {
+    width: 128px;
+    height: 128px;
 }
