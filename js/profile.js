@@ -59,6 +59,7 @@ $(document).ready(function() {
         $("#user-menu").html(user_menu_source_processed);
 
         // Add companioned trips to profile.
+        var companioned_trips_map = {};
         var companioned_trips = [];
         var companioned_trips_ids = current_user.companioned_trips.split(", ");
         if (companioned_trips_ids[0] == "") companioned_trips_ids = [];
@@ -67,29 +68,59 @@ $(document).ready(function() {
           companioned_trips_ids.forEach(function(tid, i) {
             ref.child("trips").child(tid).once('value', function(dataSnapshot) {
               var trip = dataSnapshot.val();
-              trip["tid"] = tid;
-              companioned_trips.push(trip);
-              if (companioned_trips.length == companioned_trips_ids.length) {
-                console.log('done');
-                current_user["companioned_trips"] = companioned_trips;
-                $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
+              trip.id_only = tid;
 
-                $("#email-button").hide();
-                $("#accept-button").hide();
-                $("#reject-button").hide();
-                $("#last-name").show();
-        
-                // Initialize validation for later changes. Only need to do this if you're looking at your own profile.
-                $('#edit-profile-form').validator({});
-                $('#edit-profile-form').validator().on('invalid.bs.validator', function (e) {
-                  isFormValid = false;
-                  console.log("form invalid");
-                })
-                $('#edit-profile-form').validator().on('valid.bs.validator', function (e) {
-                  isFormValid = true;
-                  console.log("form valid");
-                })
-              }
+              ref.child("users").child(trip["creator_id"]).once('value', function(dataSnapshot) {
+                var trip_creator = dataSnapshot.val();
+                trip.creator_name = trip_creator.first_name;
+                trip.creator_age = trip_creator.age;
+                trip.creator_location = trip_creator.city;
+                trip.creator_img_src = trip_creator.photo;   
+                trip.creator_email = trip_creator.email; 
+
+                var cur_trip_stop_names = [];           
+                var cur_trip_stops_latlng = [];     
+                for (var s = 0; s < trip.stops.length; s++) {
+                  cur_trip_stop_names.push(trip.stops[s].name);
+                  cur_trip_stops_latlng.push({'lat': trip.stops[s].lat, 'lng': trip.stops[s].lng});
+                }
+                trip.planned_full_latlng = cur_trip_stops_latlng;
+                trip.planned_full_route = cur_trip_stop_names;
+
+                companioned_trips.push(trip);
+                companioned_trips_map[tid] = trip;
+
+                if (companioned_trips.length == companioned_trips_ids.length) {
+                  current_user["companioned_trips"] = companioned_trips;
+                  $("#profile").html(user_template(current_user));  // Handlebars to set profile detail.
+
+                  // Direct to the correct trip-details page when clicking on a trip in which you're on a companion.
+                  $(".trip-link").click(function() {
+                    var trip_id = $($(this)[0]).attr("id");
+                    var clicked_trip = companioned_trips_map[trip_id];
+                  
+                    localStorage.setItem('trip', JSON.stringify(clicked_trip));
+                    this.href = "trip-details.html";
+                    document.location.href = "trip-details.html";  
+                  });
+
+                  $("#email-button").hide();
+                  $("#accept-button").hide();
+                  $("#reject-button").hide();
+                  $("#last-name").show();
+          
+                  // Initialize validation for later changes. Only need to do this if you're looking at your own profile.
+                  $('#edit-profile-form').validator({});
+                  $('#edit-profile-form').validator().on('invalid.bs.validator', function (e) {
+                    isFormValid = false;
+                    console.log("form invalid");
+                  })
+                  $('#edit-profile-form').validator().on('valid.bs.validator', function (e) {
+                    isFormValid = true;
+                    console.log("form valid");
+                  })
+                }
+              });
             });
           });
         } else {
