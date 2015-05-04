@@ -219,7 +219,7 @@ $(document).ready(function() {
 					$("#trip-details, #edit-trip-container").toggle();
 				});
 				$('#edit-trip-form').validator({});
-				var isFormValid;
+				var isFormValid = true;
 				$('#edit-trip-form').validator().on('invalid.bs.validator', function (e) {
 					isFormValid = false;
 				})
