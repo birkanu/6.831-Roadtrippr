@@ -43,6 +43,12 @@ body {
   font-size: 17px;
 }
 
+#trip-details {
+  position: absolute;
+  top: 0px;
+  z-index: -1;
+}
+
 #trip-details .lead {
   line-height: 0.9;
 }
@@ -147,4 +153,19 @@ body {
 .navbar-inverse .navbar-brand {
   color: #fff;
   cursor: default;
+}
+
+a {
+  color: #000;
+}
+
+.success {
+  background: green;
+  color: white;
+  font-size: 17px;
+  text-align: center;
+  display: none;
+  width: 100%;
+  margin-top: 20px;
+  z-index: 1000000;
 }
