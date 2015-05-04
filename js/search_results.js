@@ -56,7 +56,6 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
 
         var trip_dict = {};
 
-        //for (var i = 0; i < search_results.length; i++) {                        
         search_results.forEach(function(cur_trip_json) {
             var i = cur_trip_json.id;
             ref.child("users").child(cur_trip_json.creator_id).once('value', function(dataSnapshot) {
@@ -121,7 +120,6 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
         }
 
         // Add hover on abbreviated planned route for each route
-        //for (var j = 0; j < search_result_context.trips.length; j++) {
         function add_hover(j) {
             var full_route_div = $("#full_route_"+j);
             var abbr_route_div = $("#abbr_route_"+j);          
@@ -225,6 +223,10 @@ $(document).ready(function() {
                 $('#search-start-date').data("DateTimePicker").maxDate(e.date);
             }
         });  
+
+        $('.glyphicon-calendar').click(function() {
+            $(this).parent().parent().find('.form-control').data("DateTimePicker").show();
+        });        
 
         performSearch(ref, search_parameters, search_result_excludes);
 

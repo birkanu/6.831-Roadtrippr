@@ -9,7 +9,7 @@ $(document).ready(function() {
     clicked_trip_details.name = clicked_trip.trip_name;
     clicked_trip_details.start_date = moment(clicked_trip.start_date).format("MMMM DD, YYYY");
     clicked_trip_details.end_date = moment(clicked_trip.end_date).format("MMMM DD, YYYY");
-    clicked_trip_details.duration = clicked_trip.duration;;
+    clicked_trip_details.duration = clicked_trip.duration;
     clicked_trip_details.are_dates_flexible = clicked_trip.are_dates_flexible;
     clicked_trip_details.planned_full_latlng = clicked_trip.planned_full_latlng;
     clicked_trip_details.companion_count = clicked_trip.num_companions;
@@ -20,7 +20,6 @@ $(document).ready(function() {
     clicked_trip_details.creator_location = clicked_trip.creator_location;
     clicked_trip_details.creator_img_src = clicked_trip.creator_img_src;   
     clicked_trip_details.creator_email = clicked_trip.creator_email; 
-
 
     // Render the HTML for the trip details
     var trip_details_source = $("#trip-details").html();
