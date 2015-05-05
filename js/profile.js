@@ -87,6 +87,7 @@ $(document).ready(function() {
                 trip.creator_email = trip_creator.email; 
                 trip.trip_name = trip.name;
                 trip.num_companions = trip.companion_count;
+                trip.interested_users = trip.interested_users;
 
                 var cur_trip_stop_names = [];           
                 var cur_trip_stops_latlng = [];     
