@@ -14,6 +14,12 @@ $(document).ready(function() {
 	  });
 	}
 	$('.modal').on('show.bs.modal', centerModals);
+	$('#login-modal').on('shown.bs.modal', function() {
+		$("#login-email").focus();
+	});
+	$('#signup-modal').on('shown.bs.modal', function() {
+		$("#signup-first-name").focus();
+	});	
 	$(window).on('resize', centerModals);
 
 	$('#login-form').validator({});
