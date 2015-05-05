@@ -91,6 +91,7 @@ var performSearch = function(ref, search_parameters, search_result_excludes) {
                     num_companions: cur_trip_json.companion_count,
                     are_dates_flexible: cur_trip_json.are_dates_flexible,
                     map_img_src: get_map_img_src(cur_trip_json.stops),
+                    interested_users: cur_trip_json.interested_users,
                     creator_img_src: cur_user.photo,
                     creator_email: cur_user.email,
                     creator_id: dataSnapshot.key(),

@@ -49,6 +49,7 @@ $(document).ready(function() {
         clicked_trip_details.creator_location = clicked_trip.creator_location;
         clicked_trip_details.creator_img_src = clicked_trip.creator_img_src;   
         clicked_trip_details.creator_email = clicked_trip.creator_email; 
+        clicked_trip_details.interested_users = clicked_trip.interested_users;
 
         // Render the HTML for the trip details
         var trip_details_source = $("#trip-details").html();
@@ -69,7 +70,16 @@ $(document).ready(function() {
                 }                
             }
             ref.child("users").child(authData.uid).update({'interested_trips': buildString(req_trips)}, function(data) {
-                set_req_trip_button(req_trips);
+                var new_interested_users = [];
+                var new_interested_users_list = clicked_trip_details.interested_users.split(', ');
+                for (var n = 0; n < new_interested_users_list.length; n++) {
+                    if (new_interested_users_list[n] != authData.uid) {
+                        new_interested_users.push(new_interested_users_list[n]);
+                    }
+                }
+                ref.child("trips").child(clicked_trip_details.trip_id).update({'interested_users': buildString(new_interested_users)}, function(data) {
+                    set_req_trip_button(req_trips, buildString(new_interested_users));
+                });
             });  
         }
 
@@ -89,15 +99,27 @@ $(document).ready(function() {
             return trip_string;
         }
 
-        function set_req_trip_button(req_trips) {
+        function set_req_trip_button(req_trips, int_users) {
             if (current_user.companioned_trips && current_user.companioned_trips.split(', ').indexOf(clicked_trip_details.trip_id) > -1) {
                 $("#join-button").hide();
                 return;
             }
 
+            if (!(!req_trips && !int_users)) {
+                $(".success").html("Success");        
+                $(".success").fadeIn(500);
+                setTimeout(function() {
+                    $(".success").fadeOut(500);
+                }, 1500);                 
+            }
+
             if (!req_trips) {
                 req_trips = current_user.interested_trips.split(', ');
             }
+            if (!int_users) {
+                int_users = clicked_trip_details.interested_users;
+            }
+
             if (req_trips.length != 0) {
                 if (req_trips.indexOf(clicked_trip_details.trip_id) > -1) {
                     $("#join-button-link").html("WITHDRAW REQUEST");
@@ -108,19 +130,32 @@ $(document).ready(function() {
                         e.preventDefault();
                         e.stopPropagation();
                         var new_req_trips;      
-                        $(".success").html("Success");        
-                        $(".success").fadeIn(500);
-                        setTimeout(function() {
-                            $(".success").fadeOut(500);
-                        }, 1500);                                  
+                        // $(".success").html("Success");        
+                        // $(".success").fadeIn(500);
+                        // setTimeout(function() {
+                        //     $(".success").fadeOut(500);
+                        // }, 1500);                                  
                         if (req_trips.indexOf(clicked_trip_details.trip_id) > -1) {
                             new_req_trips = req_trips;
                         } else {
                             new_req_trips = req_trips.concat(clicked_trip_details.trip_id);   
                         }
                         ref.child("users").child(authData.uid).update({'interested_trips': buildString(new_req_trips)}, function(data) {
-                            $("#join-button-link").html("WITHDRAW REQUEST");
-                            $("#join-button").on('click', withdrawListener);                                                        
+                            if (int_users != undefined) {
+                                var new_interested_users = int_users;
+                                if (int_users == "") {
+                                    new_interested_users = authData.uid;
+                                } else {
+                                    new_interested_users = int_users + ", " + authData.uid;
+                                }
+                                ref.child("trips").child(clicked_trip_details.trip_id).update({'interested_users': new_interested_users}, function(data) {
+                                    $("#join-button-link").html("WITHDRAW REQUEST");
+                                    $("#join-button").on('click', withdrawListener);                                                        
+                                });                              
+                            } else {
+                                $("#join-button-link").html("WITHDRAW REQUEST");
+                                $("#join-button").on('click', withdrawListener);                                                                                        
+                            }
                         });
                     });
                 }
@@ -131,13 +166,26 @@ $(document).ready(function() {
                     e.stopPropagation();
                     var new_req_trips = [clicked_trip_details.trip_id];
                     ref.child("users").child(authData.uid).update({'interested_trips': clicked_trip_details.trip_id}, function(data) {
-                        $(".success").html("Success");
-                        $(".success").fadeIn(500);
-                        setTimeout(function() {
-                            $(".success").fadeOut(500);
-                        }, 1000);
-                        $("#join-button-link").html("WITHDRAW REQUEST");
-                        $("#join-button").on('click', withdrawListener);                            
+                        // $(".success").html("Success");
+                        // $(".success").fadeIn(500);
+                        // setTimeout(function() {
+                        //     $(".success").fadeOut(500);
+                        // }, 1000);
+                        if (int_users != undefined) {
+                            var new_interested_users = int_users;
+                            if (int_users == "") {
+                                new_interested_users = authData.uid;
+                            } else {
+                                new_interested_users = int_users + ", " + authData.uid;
+                            }
+                            ref.child("trips").child(clicked_trip_details.trip_id).update({'interested_users': new_interested_users}, function(data) {
+                                $("#join-button-link").html("WITHDRAW REQUEST");
+                                $("#join-button").on('click', withdrawListener);                                                        
+                            });                              
+                        } else {
+                            $("#join-button-link").html("WITHDRAW REQUEST");
+                            $("#join-button").on('click', withdrawListener);                                                                                        
+                        }
                     });
                 });            
             }            
